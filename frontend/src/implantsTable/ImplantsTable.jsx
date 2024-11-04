@@ -1,14 +1,38 @@
-import RowImplants from "../rowImplants/RowImplants"
+import React, { useState } from 'react';
+import RowImplants from '../rowImplants/RowImplants';
+import DialogAddUpdate from '../dialogAddUpdate/dialogAddUpdate';
+import ButtonAddUpgrade from '../buttonAddUpgrade/ButtonAddUpgrade';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper
+} from '@mui/material';
 
 function ImplantTable({
     enelImplants,
+    selectEnelImplant,
     filterText,
     selectCategory,
     selectCountry,
     operabilityOnly,
     availabilityOnly
 }) {
-    console.log(selectCategory)
+    // Stato per gestire la finestra di dialogo
+    const [open, setOpen] = useState(false);
+    const [currentImpianto, setCurrentImpianto] = useState({
+        name: "",
+        category: "",
+        country: "",
+        rated_power: 0,
+        num_unita_presenti: 0,
+        operability: false,
+        availability: false
+    });
+    const [isEditing, setIsEditing] = useState(false);
 
     const rowsImplants = [];
 
@@ -21,10 +45,10 @@ function ImplantTable({
             return;
         }
         if (selectCategory.length && !selectCategory.includes(enelImplant.category)) {
-            return
+            return;
         }
         if (selectCountry.length && !selectCountry.includes(enelImplant.country)) {
-            return
+            return;
         }
         if (availabilityOnly && !enelImplant.availability) {
             return;
@@ -34,7 +58,12 @@ function ImplantTable({
         }
         rowsImplants.push(
             <RowImplants
+                selectEnelImplant={selectEnelImplant}
+                enelImplants={enelImplants}
                 enelImplant={enelImplant}
+                openChange={setOpen}
+                currentImpiantoChange={setCurrentImpianto}
+                isEditingChange={setIsEditing}
                 key={enelImplant.id}
             />
         )
@@ -42,24 +71,63 @@ function ImplantTable({
 
     return (
         <>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Type of plant</th>
-                        <th>Country</th>
-                        <th>Rated power in MW</th>
-                        <th>Number of units</th>
-                        <th>Operability</th>
-                        <th>Availability</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {rowsImplants}
-                </tbody>
-            </table>
+            <ButtonAddUpgrade
+                // selectEnelImplant={selectEnelImplant}
+                // enelImplants={enelImplants}
+                // enelImplant={enelImplant}
+                openChange={setOpen}
+                currentImpiantoChange={setCurrentImpianto}
+                isEditingChange={setIsEditing}
+            />
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{ fontWeight: 'bold' }}>
+                                Stato aggiornamento
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>
+                                Nome
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>
+                                Tipo di impianto
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>
+                                Paese
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>
+                                Potenza Nominale
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>
+                                Num. Unità
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>
+                                Operabilità
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>
+                                Disponibilità
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>
+                                Azioni
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rowsImplants}{/* Aggiungere caso di tabella vuota */}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <DialogAddUpdate
+                enelImplants={enelImplants}
+                selectEnelImplant={selectEnelImplant}
+                open={open}
+                openChange={setOpen}
+                currentImpianto={currentImpianto}
+                currentImpiantoChange={setCurrentImpianto}
+                isEditing={isEditing}
+            />
         </>
-    )
-}
+    );
+};
 
-export default ImplantTable
+export default ImplantTable;

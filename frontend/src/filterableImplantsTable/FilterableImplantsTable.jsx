@@ -1,14 +1,12 @@
-import ImplantTable from '../implantsTable/ImplantsTable';
 import SearchBar from '../searchBar/SearchBar';
-import ScrollTop from '../scrollTop/ScrollTop';
-// import logo from './logo-enel.png';
-// import "./FilterableImplantsTable.css";
+import ImplantTable from '../implantsTable/ImplantsTable';
 import { useEffect, useState } from "react";
 
 function FilterableImplantsTable(props) {
     const [filterText, setFilterText] = useState('');
     const [availabilityOnly, setAvailabilityOnly] = useState(false);
     const [operabilityOnly, setOperabilityOnly] = useState(false);
+    const [notUpdatedOnly, setNotUpdatedOnly] = useState(false);
     const [selectCategory, setSelectCategory] = useState([]);
     const [selectCountry, setSelectCountry] = useState([]);
     const [enelImplants, setImplants] = useState([]);
@@ -26,11 +24,15 @@ function FilterableImplantsTable(props) {
         []
     )
 
+    const category = [...new Set(enelImplants.map(implant => implant.category))];
+    const country = [...new Set(enelImplants.map(implant => implant.country))];
+
     return (
         <>
             <SearchBar
                 filterText={filterText}
-                enelImplants={enelImplants}
+                category={category}
+                country={country}
                 selectCategory={selectCategory}
                 selectCountry={selectCountry}
                 operabilityOnly={operabilityOnly}
@@ -40,8 +42,10 @@ function FilterableImplantsTable(props) {
                 selectCountryChange={setSelectCountry}
                 operabilityOnlyChange={setOperabilityOnly}
                 availabilityOnlyChange={setAvailabilityOnly} />
+            <div style={{ paddingTop: "16px" }} />
             <ImplantTable
                 enelImplants={enelImplants}
+                selectEnelImplant={setImplants}
                 filterText={filterText}
                 selectCategory={selectCategory}
                 selectCountry={selectCountry}

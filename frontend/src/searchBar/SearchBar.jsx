@@ -13,7 +13,8 @@ import {
 
 function SearchBar({
     filterText,
-    enelImplants,
+    category,
+    country,
     selectCategory,
     selectCountry,
     operabilityOnly,
@@ -24,27 +25,24 @@ function SearchBar({
     operabilityOnlyChange,
     availabilityOnlyChange
 }) {
-    const category = [...new Set(enelImplants.map(implant => implant.category))];
-    const country = [...new Set(enelImplants.map(implant => implant.country))];
-
     return (
         <Box display="flex" alignItems="center" gap={2}>
 
             <TextField
                 variant="outlined"
                 value={filterText}
-                placeholder="Implant"
+                placeholder="Cerca impianto"
                 onChange={(e) => onFilterTextChange(e.target.value)}
                 fullWidth
             />
 
             <FormControl variant="outlined" fullWidth>
-                <InputLabel>Type of Plant</InputLabel>
+                <InputLabel>Tipo di impianto</InputLabel>
                 <Select
                     multiple
                     value={selectCategory}
                     onChange={(e) => selectCategoryChange(e.target.value)}
-                    label="Type of Plant"
+                    label="category"
                     renderValue={(selected) => selected.join(", ")}
                 >
                     {category.map((option, index) => (
@@ -57,12 +55,12 @@ function SearchBar({
             </FormControl>
 
             <FormControl variant="outlined" fullWidth>
-                <InputLabel>Country</InputLabel>
+                <InputLabel>Paese</InputLabel>
                 <Select
                     multiple
                     value={selectCountry}
                     onChange={(e) => selectCountryChange(e.target.value)}
-                    label="Country"
+                    label="country"
                     renderValue={(selected) => selected.join(", ")}
                 >
                     {country.map((option, index) => (
@@ -81,7 +79,7 @@ function SearchBar({
                         onChange={(e) => availabilityOnlyChange(e.target.checked)}
                     />
                 }
-                label="Available implants"
+                label="Impianti disponibili"
             />
 
             <FormControlLabel
@@ -91,7 +89,7 @@ function SearchBar({
                         onChange={(e) => operabilityOnlyChange(e.target.checked)}
                     />
                 }
-                label="Operable implants"
+                label="Implanti operativi"
             />
         </Box>
     );

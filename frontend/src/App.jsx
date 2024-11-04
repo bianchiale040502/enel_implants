@@ -1,15 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-// import CssBaseline from '@mui/material/CssBaseline';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Fab from '@mui/material/Fab';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Fade from '@mui/material/Fade';
-import { CssBaseline } from '@mui/material';
 
 import Header from './header/Header';
 import ScrollTop from './scrollTop/ScrollTop';
@@ -28,7 +19,6 @@ import React from 'react';
 function App(props) {
   return (
     <>
-      {/* <Header style={{ position: "fixed", top: 0, width: "100%", zIndex: 1000 }} /> */}
       <Header />
       <div id="back-to-top-anchor" style={{ paddingTop: "16px" }} />
       <Routes>
