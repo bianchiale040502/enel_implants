@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import RowImplants from '../rowImplants/RowImplants';
 import DialogAddUpdate from '../dialogAddUpdate/dialogAddUpdate';
 import ButtonAddUpgrade from '../buttonAddUpgrade/ButtonAddUpgrade';
@@ -12,6 +11,9 @@ import {
     Paper
 } from '@mui/material';
 
+import React, { useState } from 'react';
+import { NavigationContext } from '../NavigationContext';
+
 function ImplantTable({
     enelImplants,
     selectEnelImplant,
@@ -21,7 +23,7 @@ function ImplantTable({
     operabilityOnly,
     availabilityOnly
 }) {
-    // Stato per gestire la finestra di dialogo
+
     const [open, setOpen] = useState(false);
     const [currentImpianto, setCurrentImpianto] = useState({
         name: "",
@@ -33,6 +35,8 @@ function ImplantTable({
         availability: false
     });
     const [isEditing, setIsEditing] = useState(false);
+
+    const { isLoggedin } = React.useContext(NavigationContext);
 
     const rowsImplants = [];
 
@@ -71,14 +75,16 @@ function ImplantTable({
 
     return (
         <>
-            <ButtonAddUpgrade
-                // selectEnelImplant={selectEnelImplant}
-                // enelImplants={enelImplants}
-                // enelImplant={enelImplant}
-                openChange={setOpen}
-                currentImpiantoChange={setCurrentImpianto}
-                isEditingChange={setIsEditing}
-            />
+            {isLoggedin && (
+                <ButtonAddUpgrade
+                    // selectEnelImplant={selectEnelImplant}
+                    // enelImplants={enelImplants}
+                    // enelImplant={enelImplant}
+                    openChange={setOpen}
+                    currentImpiantoChange={setCurrentImpianto}
+                    isEditingChange={setIsEditing}
+                />
+            )}
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
@@ -96,10 +102,13 @@ function ImplantTable({
                                 Paese
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
-                                Potenza Nominale
+                                Potenza nominale in MW
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
                                 Num. Unità
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>
+                                Num. Unità operative
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
                                 Operabilità
@@ -107,13 +116,27 @@ function ImplantTable({
                             <TableCell sx={{ fontWeight: 'bold' }}>
                                 Disponibilità
                             </TableCell>
-                            <TableCell sx={{ fontWeight: 'bold' }}>
-                                Azioni
-                            </TableCell>
+                            {isLoggedin && (
+                                <TableCell sx={{ fontWeight: 'bold' }}>
+                                    Azioni
+                                </TableCell>
+                            )}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rowsImplants}{/* Aggiungere caso di tabella vuota */}
+                        {rowsImplants.length > 0 ? (
+                            rowsImplants
+                        ) : (
+                            <TableRow>
+                                <TableCell
+                                    sx={{ fontWeight: 'bold' }}
+                                    colSpan={9}
+                                    align="center"
+                                >
+                                    Nessun impianto trovato
+                                </TableCell>
+                            </TableRow>
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>

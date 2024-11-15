@@ -29,6 +29,7 @@ function SearchBar({
         <Box display="flex" alignItems="center" gap={2}>
 
             <TextField
+                name="name"
                 variant="outlined"
                 value={filterText}
                 placeholder="Cerca impianto"
@@ -39,10 +40,11 @@ function SearchBar({
             <FormControl variant="outlined" fullWidth>
                 <InputLabel>Tipo di impianto</InputLabel>
                 <Select
+                    name="category"
                     multiple
                     value={selectCategory}
                     onChange={(e) => selectCategoryChange(e.target.value)}
-                    label="category"
+                    label="Tipo di impianto"
                     renderValue={(selected) => selected.join(", ")}
                 >
                     {category.map((option, index) => (
@@ -57,10 +59,11 @@ function SearchBar({
             <FormControl variant="outlined" fullWidth>
                 <InputLabel>Paese</InputLabel>
                 <Select
+                    name="country"
                     multiple
                     value={selectCountry}
                     onChange={(e) => selectCountryChange(e.target.value)}
-                    label="country"
+                    label="Paese"
                     renderValue={(selected) => selected.join(", ")}
                 >
                     {country.map((option, index) => (
@@ -75,6 +78,7 @@ function SearchBar({
             <FormControlLabel
                 control={
                     <Checkbox
+                        name="operability"
                         checked={availabilityOnly}
                         onChange={(e) => availabilityOnlyChange(e.target.checked)}
                     />
@@ -85,6 +89,7 @@ function SearchBar({
             <FormControlLabel
                 control={
                     <Checkbox
+                        name="availability"
                         checked={operabilityOnly}
                         onChange={(e) => operabilityOnlyChange(e.target.checked)}
                     />

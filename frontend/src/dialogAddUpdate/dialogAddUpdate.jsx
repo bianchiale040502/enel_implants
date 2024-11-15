@@ -6,8 +6,44 @@ import {
     DialogTitle,
     TextField,
     Switch,
-    FormControlLabel
+    FormControlLabel,
+    FormControl,
+    Select,
+    MenuItem,
+    InputLabel
 } from '@mui/material';
+
+const COUNTRIES = [
+    "Italia",
+    "Spagna",
+    "Grecia",
+    "Germania",
+    "Stati Uniti",
+    "Canada",
+    "Messico",
+    "Panama",
+    "Guatemala",
+    "Costa Rica",
+    "Cile",
+    "Brasile",
+    "Colombia",
+    "Argentina",
+    "Marocco",
+    "Sudafrica",
+    "Zambia",
+    "Australia",
+    "India"
+];
+
+const CATEGORIES = [
+    "Termoelettrico",
+    "Idroelettrico",
+    "Geotermico",
+    "Eolico",
+    "Fotovoltaico",
+    "Nucleare"
+];
+
 function DialogAddUpdate({
     enelImplants,
     selectEnelImplant,
@@ -17,6 +53,7 @@ function DialogAddUpdate({
     currentImpiantoChange,
     isEditing,
 }) {
+
     function handleClose() {
         openChange(false);
     };
@@ -30,20 +67,67 @@ function DialogAddUpdate({
         }));
     };
 
-    function handleAdd () {
+    function handleAdd() {
+
+        const today = new Date().getTime();
+
         const newImpianto = {
             ...currentImpianto,
-            id: enelImplants.length + 1
+            dateLastUpdate: today
         };
-        selectEnelImplant([...enelImplants, newImpianto]);
-        openChange(false);
+
+        console.log('Dati inviati per aggiunta:', JSON.stringify(newImpianto));
+
+        // Effettua una richiesta POST al server per aggiungere un nuovo impianto
+        fetch('http://127.0.0.1:8080/api/implants/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newImpianto),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Errore durante l\'aggiunta dell\'impianto');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Aggiorna lo stato con il nuovo impianto aggiunto
+                selectEnelImplant([...enelImplants, data]);
+                openChange(false);
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+            });
     };
 
     function handleEdit() {
-        selectEnelImplant(enelImplants.map(imp =>
-            imp.id === currentImpianto.id ? currentImpianto : imp
-        ));
-        openChange(false);
+        fetch(`http://127.0.0.1:8080/api/implants/${currentImpianto.id}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(currentImpianto),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Errore durante la modifica dell\'impianto');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Aggiorna lo stato con l'impianto modificato
+                selectEnelImplant(
+                    enelImplants.map(imp =>
+                        imp.id === data.id ? data : imp
+                    )
+                );
+                openChange(false);
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+            });
     };
 
     return (
@@ -52,6 +136,7 @@ function DialogAddUpdate({
                 {isEditing ? 'Modifica Impianto' : 'Aggiungi Nuovo Impianto'}
             </DialogTitle>
             <DialogContent>
+
                 <TextField
                     autoFocus
                     margin="dense"
@@ -61,7 +146,39 @@ function DialogAddUpdate({
                     value={currentImpianto.name}
                     onChange={handleChange}
                 />
-                <TextField
+
+                <FormControl fullWidth margin="dense">
+                    <InputLabel>Tipo di impianto</InputLabel>
+                    <Select
+                        name="category"
+                        label="Tipo di impianto"
+                        value={currentImpianto.category || ''}
+                        onChange={handleChange}
+                    >
+                        {CATEGORIES.map((category, index) => (
+                            <MenuItem key={index} value={category}>
+                                {category}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
+                <FormControl fullWidth margin="dense">
+                    <InputLabel>Paese</InputLabel>
+                    <Select
+                        name="country"
+                        label="Paese"
+                        value={currentImpianto.country || ''}
+                        onChange={handleChange}
+                    >
+                        {COUNTRIES.map((country, index) => (
+                            <MenuItem key={index} value={country}>
+                                {country}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                {/* <TextField
                     margin="dense"
                     name="category"
                     label="Tipo di impianto"
@@ -76,7 +193,7 @@ function DialogAddUpdate({
                     fullWidth
                     value={currentImpianto.country}
                     onChange={handleChange}
-                />
+                /> */}
                 <TextField
                     margin="dense"
                     name="rated_power"
@@ -86,6 +203,7 @@ function DialogAddUpdate({
                     value={currentImpianto.rated_power}
                     onChange={handleChange}
                 />
+
                 <TextField
                     margin="dense"
                     name="num_unita_presenti"
@@ -95,6 +213,17 @@ function DialogAddUpdate({
                     value={currentImpianto.num_unita_presenti}
                     onChange={handleChange}
                 />
+
+                <TextField
+                    margin="dense"
+                    name="num_unita_operativi"
+                    label="Numero Unità Operative"
+                    type="number"
+                    fullWidth
+                    value={currentImpianto.num_unita_operativi}
+                    onChange={handleChange}
+                />
+
                 <FormControlLabel
                     control={
                         <Switch
@@ -106,6 +235,7 @@ function DialogAddUpdate({
                     }
                     label="Operabilità"
                 />
+
                 <FormControlLabel
                     control={
                         <Switch
@@ -118,6 +248,7 @@ function DialogAddUpdate({
                     label="Disponibilità"
                 />
             </DialogContent>
+
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
                     Annulla
@@ -130,8 +261,7 @@ function DialogAddUpdate({
                 </Button>
             </DialogActions>
         </Dialog>
-    )
-
+    );
 }
 
 export default DialogAddUpdate

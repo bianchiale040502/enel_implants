@@ -7,6 +7,8 @@ import {
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import WarningIcon from '@mui/icons-material/Warning';
+import React from 'react';
+import { NavigationContext } from '../NavigationContext';
 
 const oneYearInMilliseconds = 365.25 * 24 * 60 * 60 * 1000;
 
@@ -22,6 +24,8 @@ function RowImplants({
     const today = new Date().getTime();
     const updateRequired = (enelImplant.dateLastUpdate + oneYearInMilliseconds) <= today;
 
+    const { isLoggedin } = React.useContext(NavigationContext);
+
     return (
         <>
             <TableRow key={enelImplant.id}>
@@ -32,34 +36,59 @@ function RowImplants({
                         alignItems="center"
                     >
                         {updateRequired ? (
-                            <WarningIcon color="error" />
+                            <WarningIcon color="error" sx={{ fontSize: 30 }} />
                         ) : (
-                            <CheckCircleOutlineIcon color="success" />
+                            <CheckCircleOutlineIcon color="success" sx={{ fontSize: 40 }} />
                         )}
                     </Box>
                 </TableCell>
                 <TableCell>{enelImplant.name}</TableCell>
                 <TableCell>{enelImplant.category}</TableCell>
                 <TableCell>{enelImplant.country}</TableCell>
-                <TableCell>{enelImplant.rated_power} MW</TableCell>
+                <TableCell>{enelImplant.rated_power}</TableCell>
                 <TableCell>{enelImplant.num_unita_presenti}</TableCell>
-                <TableCell>{enelImplant.operability ? 'Sì' : 'No'}</TableCell>
-                <TableCell>{enelImplant.availability ? 'Sì' : 'No'}</TableCell>
+                <TableCell>{enelImplant.num_unita_operativi}</TableCell>
                 <TableCell>
-                    <ButtonAddUpgrade
-                        // selectEnelImplant={selectEnelImplant}
-                        // enelImplants={enelImplants}
-                        enelImplant={enelImplant}
-                        openChange={openChange}
-                        currentImpiantoChange={currentImpiantoChange}
-                        isEditingChange={isEditingChange}
-                    />
-                    <ButtonDelete
-                        selectEnelImplant={selectEnelImplant}
-                        enelImplants={enelImplants}
-                        enelImplant={enelImplant}
-                    />
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        {enelImplant.operability ?
+                            <CheckCircleOutlineIcon color="success" sx={{ fontSize: 40 }} />
+                            :
+                            <WarningIcon color="error" sx={{ fontSize: 40 }} />
+                        }
+                    </Box>
                 </TableCell>
+                <TableCell>
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        {enelImplant.availability ?
+                            <CheckCircleOutlineIcon color="success" sx={{ fontSize: 40 }} />
+                            :
+                            <WarningIcon color="error" sx={{ fontSize: 40 }} />
+                        }
+                    </Box>
+                </TableCell>
+                {isLoggedin && (
+                    <TableCell>
+                        <ButtonAddUpgrade
+                            enelImplant={enelImplant}
+                            openChange={openChange}
+                            currentImpiantoChange={currentImpiantoChange}
+                            isEditingChange={isEditingChange}
+                        />
+                        <ButtonDelete
+                            selectEnelImplant={selectEnelImplant}
+                            enelImplants={enelImplants}
+                            enelImplant={enelImplant}
+                        />
+                    </TableCell>
+                )}
             </TableRow>
         </>
     );

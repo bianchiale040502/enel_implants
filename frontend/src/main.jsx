@@ -2,13 +2,15 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
-// import { UserContext, UserProvider } from './UserContext.jsx';
+import { NavigationProvider } from './NavigationContext.jsx';
 import './index.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <NavigationProvider>
+        <App />
+      </NavigationProvider>
     </BrowserRouter>
   </StrictMode>,
 )

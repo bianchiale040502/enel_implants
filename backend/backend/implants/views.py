@@ -12,10 +12,11 @@ class ImplantSerializer(serializers.HyperlinkedModelSerializer):
             'country',
             'rated_power',
             'num_unita_presenti',
+            'num_unita_operativi',
             'operability',
             'availability',
             'dateLastUpdate'
-            ]
+        ]
 
 class ImplantViewSet(viewsets.ModelViewSet):
     queryset = Implant.objects.all()

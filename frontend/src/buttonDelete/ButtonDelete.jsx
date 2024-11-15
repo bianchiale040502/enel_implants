@@ -1,4 +1,14 @@
-import { Button } from '@mui/material';
+import * as React from 'react';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle
+} from '@mui/material';
+
+// import { useEffect } from 'react';
 
 function ButtonDelete({
     selectEnelImplant,
@@ -6,20 +16,70 @@ function ButtonDelete({
     enelImplant
 }) {
 
-    function handleDelete(id) {
-        selectEnelImplant(enelImplants.filter(imp => imp.id !== id));
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    async function handleDelete(id) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/implants/${id}/`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${localStorage.getItem('token')}` // Se usi il token di autenticazione
+                }
+            });
+
+            if (response.ok) {
+                selectEnelImplant(enelImplants.filter(imp => imp.id !== id));
+                console.log(`Implant con ID ${id} eliminato con successo`);
+            } else {
+                console.error('Errore durante l\'eliminazione:', response.statusText);
+            }
+
+        } catch (error) {
+            console.error('Si è verificato un errore:', error);
+        }
     };
 
     return (
-        <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => handleDelete(enelImplant.id)}
-        >
-            Elimina
-        </Button>
-    )
-
+        <React.Fragment>
+            <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleClickOpen}
+            >
+                Elimina
+            </Button>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {`Eliminazione del record di ${enelImplant.name}`}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Sicuro di voler cancellare il record dell'impianto?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Annulla</Button>
+                    <Button onClick={() => handleDelete(enelImplant.id)} autoFocus>
+                        Elimina
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </React.Fragment>
+    );
 }
 
 export default ButtonDelete

@@ -1,12 +1,11 @@
 import SearchBar from '../searchBar/SearchBar';
 import ImplantTable from '../implantsTable/ImplantsTable';
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-function FilterableImplantsTable(props) {
+function FilterableImplantsTable() {
     const [filterText, setFilterText] = useState('');
     const [availabilityOnly, setAvailabilityOnly] = useState(false);
     const [operabilityOnly, setOperabilityOnly] = useState(false);
-    const [notUpdatedOnly, setNotUpdatedOnly] = useState(false);
     const [selectCategory, setSelectCategory] = useState([]);
     const [selectCountry, setSelectCountry] = useState([]);
     const [enelImplants, setImplants] = useState([]);

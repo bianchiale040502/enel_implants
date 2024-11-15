@@ -19,6 +19,7 @@ function ButtonAddUpgrade({
                 country: "",
                 rated_power: 0,
                 num_unita_presenti: 0,
+                num_unita_operativi: 0,
                 operability: false,
                 availability: false
             });
