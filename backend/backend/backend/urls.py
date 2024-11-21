@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from rest_framework import routers
-from implants.views import ImplantViewSet
+from implants.views import ImplantViewSet, LoginView
 
 from rest_framework.authtoken import views
 
@@ -28,6 +28,7 @@ router.register(r'implants', ImplantViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/signIn/', LoginView.as_view(), name='signIn'),
     path('api-auth/', include('rest_framework.urls')),
     path('api-token-auth/', views.obtain_auth_token)
 ]

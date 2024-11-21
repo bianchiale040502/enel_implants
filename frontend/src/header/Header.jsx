@@ -9,8 +9,7 @@ import {
 
 import {
     useNavigate,
-    useLocation,
-    redirect
+    useLocation
 } from 'react-router-dom';
 
 import { NavigationContext } from '../NavigationContext.jsx';

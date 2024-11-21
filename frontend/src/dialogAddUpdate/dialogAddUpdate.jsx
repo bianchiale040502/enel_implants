@@ -83,6 +83,7 @@ function DialogAddUpdate({
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`
             },
             body: JSON.stringify(newImpianto),
         })
@@ -107,6 +108,7 @@ function DialogAddUpdate({
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${localStorage.getItem('token')}`
             },
             body: JSON.stringify(currentImpianto),
         })

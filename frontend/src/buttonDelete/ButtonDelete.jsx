@@ -8,8 +8,6 @@ import {
     DialogTitle
 } from '@mui/material';
 
-// import { useEffect } from 'react';
-
 function ButtonDelete({
     selectEnelImplant,
     enelImplants,
@@ -32,7 +30,9 @@ function ButtonDelete({
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('token')}` // Se usi il token di autenticazione
+
+                    // Se usi il token di autenticazione
+                    'Authorization': `Token ${localStorage.getItem('token')}`
                 }
             });
 

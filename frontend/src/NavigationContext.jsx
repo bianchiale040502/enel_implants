@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createContext, useState } from "react";
-import { useNavigate, useLocation, redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const NavigationContext = createContext();
 
@@ -11,32 +11,44 @@ const LOGGED_OUT_ADMIN = {
 
 export const NavigationProvider = ({ children }) => {
 
-    const [isLoggedin, setIsLoggedin] = React.useState(false);
+    const [isLoggedin, setIsLoggedin] = useState(false);
     const [admin, setUser] = useState(LOGGED_OUT_ADMIN);
-
     const navigate = useNavigate();
-    const location = useLocation();
 
-    const urlSignIn = location.pathname === '/signIn';
+    const login = async (username, password) => {
 
-    function login(username, password) {
+        try {
+            const response = await fetch('http://localhost:8080/api/signIn/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                    group: 'Admins'
+                })
+            });
 
-        //mockup
-        const LOGGED_IN_ADMIN = {
-            username: 'ale',
-            password: '1'
-        }
-
-        const USERNAME = 'ale';
-        const PASSWORD = '1'
-
-        if (username == USERNAME && password == PASSWORD) {
-            setUser(LOGGED_IN_ADMIN)
-            navigate('/')
-            setIsLoggedin(true)
-            console.log('Login effettuato')
-        } else {
-            console.log('Credenziali errate')
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
+                navigate('/');
+                setIsLoggedin(true);
+                return true;
+            } else {
+                const errorData = await response.json();
+                // console.log(errorData.error || 'Utente non trovato');
+                setIsLoggedin(false);
+                setUser(LOGGED_OUT_ADMIN);
+                return false;
+            }
+        } catch (error) {
+            const errorData = await response.json();
+            // console.log('Errore durante il login. Riprova più tardi.');
+            setIsLoggedin(false);
+            setUser(LOGGED_OUT_ADMIN);
+            return false;
         }
     }
 

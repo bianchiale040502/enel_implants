@@ -1,20 +1,16 @@
 import * as React from 'react';
 import { useContext, useState } from 'react';
-
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-// import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Divider from '@mui/material/Divider';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
+import {
+    Box,
+    Button,
+    FormLabel,
+    FormControl,
+    TextField,
+    Typography,
+    Stack,
+    Card as MuiCard,
+    styled
+} from '@mui/material';
 import { NavigationContext } from '../NavigationContext';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -60,39 +56,37 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 function SignIn() {
-    const [usernameError, setUsernameError] = React.useState(false);
-    const [usernameErrorMessage, setUsernameErrorMessage] = React.useState('');
-    const [passwordError, setPasswordError] = React.useState(false);
-    const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+    const [usernameError, setUsernameError] = useState(false);
+    const [usernameErrorMessage, setUsernameErrorMessage] = useState('');
+    const [passwordError, setPasswordError] = useState(false);
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+    const [loginError, setLoginError] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    // const [open, setOpen] = React.useState(false);
 
-    // const handleClickOpen = () => {
-    //     setOpen(true);
-    // };
+    const { login } = useContext(NavigationContext);
 
-    // const handleClose = () => {
-    //     setOpen(false);
-    // };
+    async function handleSubmit(e) {
+        e.preventDefault();
 
-    const { isInHome, isLoggedin, login, logout } = useContext(NavigationContext);
+        if (!validateInputs()) return;
 
-    function handleSubmit(event) {
-        if (usernameError || passwordError) {
-            event.preventDefault();
-            return;
+        const isSuccess = await login(username, password);
+
+        if (!isSuccess) {
+            setLoginError('Credenziali errate. Riprova.');
+            setUsername('');
+            setPassword('');
+        } else {
+            setLoginError('');
         }
-        login(username, password)
-    };
+    }
 
     function validateInputs() {
-        const username = document.getElementById('username');
-        const password = document.getElementById('password');
 
         let isValid = true;
 
-        if (!username.value) {
+        if (!username) {
             setUsernameError(true);
             setUsernameErrorMessage('Please enter a username.');
             isValid = false;
@@ -102,7 +96,7 @@ function SignIn() {
         }
 
         // if (!password.value || password.value.length < 6) {
-        if (!password.value) {
+        if (!password) {
             setPasswordError(true);
             setPasswordErrorMessage('Password must be at least 6 characters long.');
             isValid = false;
@@ -115,53 +109,48 @@ function SignIn() {
     };
 
     return (
-        <>
-            <SignInContainer direction="column">
-                {/* <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} /> */}
-                <Card variant="outlined">
-                    {/* <SitemarkIcon /> */}
-                    <Typography
-                        component="h1"
-                        variant="h4"
-                        sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-                    >
-                        Sign in
-                    </Typography>
-                    <Box
-                        component="form"
-                        onSubmit={handleSubmit}
-                        noValidate
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            width: '100%',
-                            gap: 2,
-                        }}
-                    >
-                        <FormControl>
-                            <FormLabel htmlFor="username">Usename</FormLabel>
-                            <TextField
-                                error={usernameError}
-                                helperText={usernameErrorMessage}
-                                id="username"
-                                type="text"
-                                name="username"
-                                placeholder="username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                // autoComplete="email"
-                                // autoFocus
-                                required
-                                fullWidth
-                                variant="outlined"
-                                color={usernameError ? 'error' : 'primary'}
-                                sx={{ ariaLabel: 'username' }}
-                            />
-                        </FormControl>
-                        <FormControl>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <FormLabel htmlFor="password">Password</FormLabel>
-                                {/* <Link
+        <SignInContainer direction="column">
+            {/* <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} /> */}
+            <Card variant="outlined">
+                {/* <SitemarkIcon /> */}
+                <Typography
+                    component="h1"
+                    variant="h4"
+                >
+                    Sign in
+                </Typography>
+                <Box
+                    component="form"
+                    onSubmit={handleSubmit}
+                    noValidate
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                    }}
+                >
+                    <FormControl>
+                        <FormLabel htmlFor="username">Usename</FormLabel>
+                        <TextField
+                            error={usernameError}
+                            helperText={usernameErrorMessage}
+                            id="username"
+                            type="text"
+                            name="username"
+                            placeholder="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                            fullWidth
+                        // variant="outlined"
+                        // color={usernameError ? 'error' : 'primary'}
+                        // sx={{ ariaLabel: 'username' }}
+                        />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel htmlFor="password">Password</FormLabel>
+                        {/* <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Link
                                     component="button"
                                     type="button"
                                     onClick={handleClickOpen}
@@ -169,76 +158,47 @@ function SignIn() {
                                     sx={{ alignSelf: 'baseline' }}
                                 >
                                     Forgot your password?
-                                </Link> */}
-                            </Box>
-                            <TextField
-                                error={passwordError}
-                                helperText={passwordErrorMessage}
-                                id="password"
-                                type="password"
-                                name="password"
-                                placeholder="••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                // autoComplete="current-password"
-                                // autoFocus
-                                required
-                                fullWidth
-                                variant="outlined"
-                                color={passwordError ? 'error' : 'primary'}
-                            />
-                        </FormControl>
-                        {/* <FormControlLabel
+                                </Link>
+                            </Box> */}
+                        <TextField
+                            error={passwordError}
+                            helperText={passwordErrorMessage}
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="••••••"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            fullWidth
+                        // variant="outlined"
+                        // color={passwordError ? 'error' : 'primary'}
+                        />
+                    </FormControl>
+                    {loginError && (
+                        <Typography
+                            color="error"
+                            sx={{ textAlign: 'center' }}
+                        >
+                            {loginError}
+                        </Typography>
+                    )}
+                    {/* <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
                             label="Remember me"
                         />
                         <ForgotPassword open={open} handleClose={handleClose} /> */}
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            onClick={validateInputs}
-                        >
-                            Sign in
-                        </Button>
-                        {/* <Typography sx={{ textAlign: 'center' }}>
-                            Don&apos;t have an account?{' '}
-                            <span>
-                                <Link
-                                    href="/material-ui/getting-started/templates/sign-in/"
-                                    variant="body2"
-                                    sx={{ alignSelf: 'center' }}
-                                >
-                                    Sign up
-                                </Link>
-                            </span>
-                        </Typography> */}
-                    </Box>
-                    {/* <Divider>or</Divider>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        <Button
-                            fullWidth
-                            variant="outlined"
-                            onClick={() => alert('Sign in with Google')}
-                            startIcon={<GoogleIcon />}
-                        >
-                            Sign in with Google
-                        </Button>
-                        <Button
-                            fullWidth
-                            variant="outlined"
-                            onClick={() => alert('Sign in with Facebook')}
-                            startIcon={<FacebookIcon />}
-                        >
-                            Sign in with Facebook
-                        </Button>
-                    </Box> */}
-                </Card>
-            </SignInContainer>
-        </>
-        // <AppTheme {...props}>
-        //     {/* <CssBaseline enableColorScheme /> */}
-        // </AppTheme>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                    // onClick={validateInputs}
+                    >
+                        Sign in
+                    </Button>
+                </Box>
+            </Card>
+        </SignInContainer>
     );
 }
 
