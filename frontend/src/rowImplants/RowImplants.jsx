@@ -1,5 +1,6 @@
-import ButtonAddUpgrade from '../buttonAddUpgrade/ButtonAddUpgrade';
-import ButtonDelete from '../ButtonDelete/buttonDelete';
+import React from 'react';
+import { NavigationContext } from '../NavigationContext';
+
 import {
     TableCell,
     TableRow,
@@ -7,8 +8,9 @@ import {
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import WarningIcon from '@mui/icons-material/Warning';
-import React from 'react';
-import { NavigationContext } from '../NavigationContext';
+
+import ButtonAddUpgrade from '../buttonAddUpgrade/ButtonAddUpgrade';
+import ButtonDelete from '../ButtonDelete/buttonDelete';
 
 const oneYearInMilliseconds = 365.25 * 24 * 60 * 60 * 1000;
 

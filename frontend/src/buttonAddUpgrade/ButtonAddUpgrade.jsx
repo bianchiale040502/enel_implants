@@ -1,8 +1,6 @@
 import { Button } from '@mui/material';
 
 function ButtonAddUpgrade({
-    // selectEnelImplant,
-    // enelImplants,
     enelImplant,
     openChange,
     currentImpiantoChange,

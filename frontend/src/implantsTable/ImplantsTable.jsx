@@ -1,6 +1,6 @@
-import RowImplants from '../rowImplants/RowImplants';
-import DialogAddUpdate from '../dialogAddUpdate/dialogAddUpdate';
-import ButtonAddUpgrade from '../buttonAddUpgrade/ButtonAddUpgrade';
+import React, { useState } from 'react';
+import { NavigationContext } from '../NavigationContext';
+
 import {
     Table,
     TableBody,
@@ -11,8 +11,10 @@ import {
     Paper
 } from '@mui/material';
 
-import React, { useState } from 'react';
-import { NavigationContext } from '../NavigationContext';
+import RowImplants from '../rowImplants/RowImplants';
+import DialogAddUpdate from '../dialogAddUpdate/dialogAddUpdate';
+import ButtonAddUpgrade from '../buttonAddUpgrade/ButtonAddUpgrade';
+
 
 function ImplantTable({
     enelImplants,

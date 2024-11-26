@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useContext, useState } from 'react';
+import { NavigationContext } from '../NavigationContext';
+
 import {
     Box,
     Button,
@@ -8,10 +10,11 @@ import {
     TextField,
     Typography,
     Stack,
+    Alert,
+    AlertTitle,
     Card as MuiCard,
     styled
 } from '@mui/material';
-import { NavigationContext } from '../NavigationContext';
 
 const Card = styled(MuiCard)(({ theme }) => ({
     display: 'flex',
@@ -33,12 +36,9 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
-    height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-    minHeight: '100%',
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(4),
-    },
+    // height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
+    // minHeight: '100%',
+    padding: theme.spacing(10),
     '&::before': {
         content: '""',
         display: 'block',
@@ -71,14 +71,22 @@ function SignIn() {
 
         if (!validateInputs()) return;
 
-        const isSuccess = await login(username, password);
+        const response = await login(username, password);
 
-        if (!isSuccess) {
-            setLoginError('Credenziali errate. Riprova.');
-            setUsername('');
-            setPassword('');
-        } else {
-            setLoginError('');
+        if (!response.success) {
+            if (response.code === 401) {
+                setLoginError('')
+                setUsernameError(true);
+                setUsernameErrorMessage(response.error);
+                setPasswordError(true);
+                setPasswordErrorMessage(response.error);
+                setUsername('');
+                setPassword('');
+            } else {
+                setLoginError(response.error)
+                setUsername('');
+                setPassword('');
+            }
         }
     }
 
@@ -88,17 +96,16 @@ function SignIn() {
 
         if (!username) {
             setUsernameError(true);
-            setUsernameErrorMessage('Please enter a username.');
+            setUsernameErrorMessage('Inserire username');
             isValid = false;
         } else {
             setUsernameError(false);
             setUsernameErrorMessage('');
         }
 
-        // if (!password.value || password.value.length < 6) {
-        if (!password) {
+        if (!password || password.length < 6) {
             setPasswordError(true);
-            setPasswordErrorMessage('Password must be at least 6 characters long.');
+            setPasswordErrorMessage('Password deve avere almeno 6 caratteri.');
             isValid = false;
         } else {
             setPasswordError(false);
@@ -110,9 +117,7 @@ function SignIn() {
 
     return (
         <SignInContainer direction="column">
-            {/* <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} /> */}
             <Card variant="outlined">
-                {/* <SitemarkIcon /> */}
                 <Typography
                     component="h1"
                     variant="h4"
@@ -142,24 +147,10 @@ function SignIn() {
                             onChange={(e) => setUsername(e.target.value)}
                             required
                             fullWidth
-                        // variant="outlined"
-                        // color={usernameError ? 'error' : 'primary'}
-                        // sx={{ ariaLabel: 'username' }}
                         />
                     </FormControl>
                     <FormControl>
                         <FormLabel htmlFor="password">Password</FormLabel>
-                        {/* <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Link
-                                    component="button"
-                                    type="button"
-                                    onClick={handleClickOpen}
-                                    variant="body2"
-                                    sx={{ alignSelf: 'baseline' }}
-                                >
-                                    Forgot your password?
-                                </Link>
-                            </Box> */}
                         <TextField
                             error={passwordError}
                             helperText={passwordErrorMessage}
@@ -171,31 +162,21 @@ function SignIn() {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                             fullWidth
-                        // variant="outlined"
-                        // color={passwordError ? 'error' : 'primary'}
                         />
                     </FormControl>
-                    {loginError && (
-                        <Typography
-                            color="error"
-                            sx={{ textAlign: 'center' }}
-                        >
-                            {loginError}
-                        </Typography>
-                    )}
-                    {/* <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
-                        <ForgotPassword open={open} handleClose={handleClose} /> */}
                     <Button
                         type="submit"
                         variant="contained"
                         fullWidth
-                    // onClick={validateInputs}
                     >
                         Sign in
                     </Button>
+                    {loginError && (
+                        <Alert severity="error">
+                            <AlertTitle>Errore</AlertTitle>
+                            {loginError}
+                        </Alert>
+                    )}
                 </Box>
             </Card>
         </SignInContainer>

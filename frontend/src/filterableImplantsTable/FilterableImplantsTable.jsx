@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
+
 import SearchBar from '../searchBar/SearchBar';
 import ImplantTable from '../implantsTable/ImplantsTable';
-import { useEffect, useState } from 'react';
 
 function FilterableImplantsTable() {
     const [filterText, setFilterText] = useState('');

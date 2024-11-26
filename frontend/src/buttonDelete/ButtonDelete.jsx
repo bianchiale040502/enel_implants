@@ -30,8 +30,6 @@ function ButtonDelete({
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-
-                    // Se usi il token di autenticazione
                     'Authorization': `Token ${localStorage.getItem('token')}`
                 }
             });

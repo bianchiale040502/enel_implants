@@ -78,7 +78,6 @@ function DialogAddUpdate({
 
         console.log('Dati inviati per aggiunta:', JSON.stringify(newImpianto));
 
-        // Effettua una richiesta POST al server per aggiungere un nuovo impianto
         fetch('http://127.0.0.1:8080/api/implants/', {
             method: 'POST',
             headers: {
@@ -94,7 +93,6 @@ function DialogAddUpdate({
                 return response.json();
             })
             .then(data => {
-                // Aggiorna lo stato con il nuovo impianto aggiunto
                 selectEnelImplant([...enelImplants, data]);
                 openChange(false);
             })
@@ -119,7 +117,6 @@ function DialogAddUpdate({
                 return response.json();
             })
             .then(data => {
-                // Aggiorna lo stato con l'impianto modificato
                 selectEnelImplant(
                     enelImplants.map(imp =>
                         imp.id === data.id ? data : imp
@@ -180,22 +177,6 @@ function DialogAddUpdate({
                         ))}
                     </Select>
                 </FormControl>
-                {/* <TextField
-                    margin="dense"
-                    name="category"
-                    label="Tipo di impianto"
-                    fullWidth
-                    value={currentImpianto.category}
-                    onChange={handleChange}
-                />
-                <TextField
-                    margin="dense"
-                    name="country"
-                    label="Paese"
-                    fullWidth
-                    value={currentImpianto.country}
-                    onChange={handleChange}
-                /> */}
                 <TextField
                     margin="dense"
                     name="rated_power"
