@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 export const NavigationContext = createContext();
 
 const LOGGED_OUT_ADMIN = {
@@ -9,19 +9,13 @@ const LOGGED_OUT_ADMIN = {
 
 export const NavigationProvider = ({ children }) => {
 
+    const [token, setToken] = useState(null)
     const [isLoggedin, setIsLoggedin] = useState(false);
     const [admin, setUser] = useState(LOGGED_OUT_ADMIN);
     const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
+    const location = useLocation();
     const navigate = useNavigate();
-
-    function goSignInView() {
-        navigate('/signIn')
-    }
-
-    function outSignInView() {
-        navigate('/')
-    }
 
     const login = async (username, password) => {
         try {
@@ -40,11 +34,13 @@ export const NavigationProvider = ({ children }) => {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('token', data.token);
-                navigate('/');
+                setToken(data.token);
                 setIsLoggedin(true);
                 return { success: true, error: null, code: null };
             } else {
                 const errorData = await response.json();
+                setToken(null);
+                localStorage.removeItem('token');
                 setIsLoggedin(false);
                 setUser(LOGGED_OUT_ADMIN);
                 return {
@@ -54,6 +50,8 @@ export const NavigationProvider = ({ children }) => {
                 };
             }
         } catch (error) {
+            setToken(null);
+            localStorage.removeItem('token');
             setIsLoggedin(false);
             setUser(LOGGED_OUT_ADMIN);
             return {
@@ -65,29 +63,34 @@ export const NavigationProvider = ({ children }) => {
     }
 
     function logout() {
+        setToken(null);
+        localStorage.removeItem('token');
         setIsLoggedin(false);
         setUser(LOGGED_OUT_ADMIN);
-        localStorage.removeItem('token');
         setShowLogoutDialog(false);
     }
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
+        const savedToken = localStorage.getItem('token');
+
+        if (savedToken) {
             setIsLoggedin(true);
         }
-    }, []);
+
+        if (savedToken && isLoggedin && (location.pathname !== '/')) {
+            navigate('/')
+        }
+
+    }, [token, isLoggedin, location.pathname]);
 
     return (
         <NavigationContext.Provider value=
             {{
                 admin,
+                token,
                 isLoggedin,
-                setIsLoggedin,
                 showLogoutDialog,
                 setShowLogoutDialog,
-                goSignInView,
-                outSignInView,
                 login,
                 logout
             }}

@@ -8,9 +8,9 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    Box,
     Paper
 } from '@mui/material';
-
 import RowImplants from '../rowImplants/RowImplants';
 import DialogAddUpdate from '../dialogAddUpdate/dialogAddUpdate';
 import ButtonAddUpgrade from '../buttonAddUpgrade/ButtonAddUpgrade';
@@ -25,6 +25,12 @@ function ImplantTable({
     operabilityOnly,
     availabilityOnly
 }) {
+
+    const boxCell = {
+        display: "flex",
+        justifyContent: "center",
+        textAlign: "center"
+    }
 
     const [open, setOpen] = useState(false);
     const [currentImpianto, setCurrentImpianto] = useState({
@@ -79,9 +85,6 @@ function ImplantTable({
         <>
             {isLoggedin && (
                 <ButtonAddUpgrade
-                    // selectEnelImplant={selectEnelImplant}
-                    // enelImplants={enelImplants}
-                    // enelImplant={enelImplant}
                     openChange={setOpen}
                     currentImpiantoChange={setCurrentImpianto}
                     isEditingChange={setIsEditing}
@@ -92,35 +95,55 @@ function ImplantTable({
                     <TableHead>
                         <TableRow>
                             <TableCell sx={{ fontWeight: 'bold' }}>
-                                Stato aggiornamento
+                                <Box style={boxCell}>
+                                    Stato aggiornamento
+                                </Box>
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
-                                Nome
+                                <Box style={boxCell}>
+                                    Nome
+                                </Box>
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
-                                Tipo di impianto
+                                <Box style={boxCell}>
+                                    Tipo di impianto
+                                </Box>
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
-                                Paese
+                                <Box style={boxCell}>
+                                    Paese
+                                </Box>
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
-                                Potenza nominale in MW
+                                <Box style={boxCell}>
+                                    Potenza nominale in MW
+                                </Box>
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
-                                Num. Unità
+                                <Box style={boxCell}>
+                                    Num. Unità
+                                </Box>
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
-                                Num. Unità operative
+                                <Box style={boxCell}>
+                                    Num. Unità operative
+                                </Box>
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
-                                Operabilità
+                                <Box style={boxCell}>
+                                    Operabilità
+                                </Box>
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
-                                Disponibilità
+                                <Box style={boxCell}>
+                                    Disponibilità
+                                </Box>
                             </TableCell>
                             {isLoggedin && (
                                 <TableCell sx={{ fontWeight: 'bold' }}>
-                                    Azioni
+                                    <Box style={boxCell}>
+                                        Azioni
+                                    </Box>
                                 </TableCell>
                             )}
                         </TableRow>
@@ -131,7 +154,6 @@ function ImplantTable({
                         ) : (
                             <TableRow>
                                 <TableCell
-                                    sx={{ fontWeight: 'bold' }}
                                     colSpan={9}
                                     align="center"
                                 >

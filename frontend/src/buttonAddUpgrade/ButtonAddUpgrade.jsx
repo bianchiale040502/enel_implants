@@ -32,7 +32,7 @@ function ButtonAddUpgrade({
                     variant="outlined"
                     color="primary"
                     onClick={() => handleOpen(enelImplant)}
-                    sx={{ mr: 1 }}
+                    fullWidth
                 >
                     Modifica
                 </Button>

@@ -71,7 +71,7 @@ function ButtonDelete({
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Annulla</Button>
-                    <Button onClick={() => handleDelete(enelImplant.id)} autoFocus>
+                    <Button onClick={() => handleDelete(enelImplant.id)}>
                         Elimina
                     </Button>
                 </DialogActions>

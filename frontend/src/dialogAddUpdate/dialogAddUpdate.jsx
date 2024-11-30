@@ -67,7 +67,7 @@ function DialogAddUpdate({
         }));
     };
 
-    function handleAdd() {
+    async function handleAdd() {
 
         const today = new Date().getTime();
 
@@ -76,7 +76,7 @@ function DialogAddUpdate({
             dateLastUpdate: today
         };
 
-        console.log('Dati inviati per aggiunta:', JSON.stringify(newImpianto));
+        // console.log('Dati inviati per aggiunta:', JSON.stringify(newImpianto));
 
         fetch('http://127.0.0.1:8080/api/implants/', {
             method: 'POST',
@@ -101,7 +101,7 @@ function DialogAddUpdate({
             });
     };
 
-    function handleEdit() {
+    async function handleEdit() {
         fetch(`http://127.0.0.1:8080/api/implants/${currentImpianto.id}/`, {
             method: 'PUT',
             headers: {

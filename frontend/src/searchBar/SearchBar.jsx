@@ -29,15 +29,18 @@ function SearchBar({
         <Box display="flex" alignItems="center" gap={2}>
 
             <TextField
-                name="name"
+                name="implant"
                 variant="outlined"
                 value={filterText}
                 placeholder="Cerca impianto"
                 onChange={(e) => onFilterTextChange(e.target.value)}
-                fullWidth
+                sx={{ width: 0.20 }}
             />
 
-            <FormControl variant="outlined" fullWidth>
+            <FormControl
+                variant="outlined"
+                sx={{ width: 0.15 }}
+            >
                 <InputLabel>Tipo di impianto</InputLabel>
                 <Select
                     name="category"
@@ -56,7 +59,10 @@ function SearchBar({
                 </Select>
             </FormControl>
 
-            <FormControl variant="outlined" fullWidth>
+            <FormControl
+                variant="outlined"
+                sx={{ width: 0.15 }}
+            >
                 <InputLabel>Paese</InputLabel>
                 <Select
                     name="country"

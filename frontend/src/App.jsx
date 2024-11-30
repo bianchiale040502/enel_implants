@@ -9,8 +9,6 @@ import FilterableImplantsTable from './filterableImplantsTable/FilterableImplant
 import SignIn from './signIn/SignIn';
 import ScrollTop from './scrollTop/ScrollTop';
 
-
-
 function App(props) {
   return (
     <>
