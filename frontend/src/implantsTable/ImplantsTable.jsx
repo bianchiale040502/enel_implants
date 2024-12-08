@@ -34,7 +34,7 @@ function ImplantTable({
 
     const [open, setOpen] = useState(false);
     const [currentImpianto, setCurrentImpianto] = useState({
-        name: "",
+        implant_name: "",
         category: "",
         country: "",
         rated_power: 0,
@@ -50,7 +50,7 @@ function ImplantTable({
 
     enelImplants.forEach((enelImplant) => {
         if (
-            enelImplant.name.toLowerCase().indexOf(
+            enelImplant.implant_name.toLowerCase().indexOf(
                 filterText.toLowerCase()
             ) === -1
         ) {

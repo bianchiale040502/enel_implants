@@ -29,7 +29,7 @@ function SearchBar({
         <Box display="flex" alignItems="center" gap={2}>
 
             <TextField
-                name="implant"
+                name="searchImplant"
                 variant="outlined"
                 value={filterText}
                 placeholder="Cerca impianto"
@@ -39,11 +39,11 @@ function SearchBar({
 
             <FormControl
                 variant="outlined"
-                sx={{ width: 0.15 }}
+                sx={{ width: 0.20 }}
             >
                 <InputLabel>Tipo di impianto</InputLabel>
                 <Select
-                    name="category"
+                    name="searchCategory"
                     multiple
                     value={selectCategory}
                     onChange={(e) => selectCategoryChange(e.target.value)}
@@ -61,11 +61,11 @@ function SearchBar({
 
             <FormControl
                 variant="outlined"
-                sx={{ width: 0.15 }}
+                sx={{ width: 0.20 }}
             >
                 <InputLabel>Paese</InputLabel>
                 <Select
-                    name="country"
+                    name="searchCountry"
                     multiple
                     value={selectCountry}
                     onChange={(e) => selectCountryChange(e.target.value)}
@@ -84,23 +84,23 @@ function SearchBar({
             <FormControlLabel
                 control={
                     <Checkbox
-                        name="operability"
-                        checked={availabilityOnly}
-                        onChange={(e) => availabilityOnlyChange(e.target.checked)}
+                        name="searchAvailabilityTrue"
+                        checked={operabilityOnly}
+                        onChange={(e) => operabilityOnlyChange(e.target.checked)}
                     />
                 }
-                label="Impianti disponibili"
+                label="Impianti Operativi (in funzione)"
             />
 
             <FormControlLabel
                 control={
                     <Checkbox
-                        name="availability"
-                        checked={operabilityOnly}
-                        onChange={(e) => operabilityOnlyChange(e.target.checked)}
+                        name="searchOperabilityTrue"
+                        checked={availabilityOnly}
+                        onChange={(e) => availabilityOnlyChange(e.target.checked)}
                     />
                 }
-                label="Implanti operativi"
+                label="Impianti Disponibili"
             />
         </Box>
     );

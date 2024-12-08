@@ -11,7 +11,7 @@ class ImplantSerializer(serializers.HyperlinkedModelSerializer):
         model = Implant
         fields = [
             'id',
-            'name',
+            'implant_name',
             'category',
             'country',
             'rated_power',

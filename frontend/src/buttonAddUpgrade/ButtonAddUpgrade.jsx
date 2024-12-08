@@ -8,11 +8,12 @@ function ButtonAddUpgrade({
 }) {
     function handleOpen(enelImplant) {
         if (enelImplant) {
-            currentImpiantoChange(enelImplant);
             isEditingChange(true);
+            currentImpiantoChange(enelImplant);
         } else {
+            isEditingChange(false);
             currentImpiantoChange({
-                name: "",
+                implant_name: "",
                 category: "",
                 country: "",
                 rated_power: 0,
@@ -21,7 +22,6 @@ function ButtonAddUpgrade({
                 operability: false,
                 availability: false
             });
-            isEditingChange(false);
         }
         openChange(true);
     };

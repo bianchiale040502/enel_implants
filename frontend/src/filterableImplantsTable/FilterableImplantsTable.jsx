@@ -20,9 +20,7 @@ function FilterableImplantsTable() {
                 });
         }
         download();
-    },
-        []
-    )
+    }, [])
 
     const category = [...new Set(enelImplants.map(implant => implant.category))];
     const country = [...new Set(enelImplants.map(implant => implant.country))];

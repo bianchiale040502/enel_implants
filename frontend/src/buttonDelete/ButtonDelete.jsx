@@ -5,8 +5,12 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle
+    DialogTitle,
+    Snackbar,
+    Alert
 } from '@mui/material';
+import { useState } from 'react';
+// import SnackbarAddUpgradeDelet from '../snackbarAddUpgradeDelet/SnackbarAddUpgradeDelet';
 
 function ButtonDelete({
     selectEnelImplant,
@@ -14,6 +18,11 @@ function ButtonDelete({
     enelImplant
 }) {
 
+    const [snackbarState, setSnackbarState] = useState({
+        open: false,
+        severity: 'success',
+        message: '',
+    });
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -33,21 +42,38 @@ function ButtonDelete({
                     'Authorization': `Token ${localStorage.getItem('token')}`
                 }
             });
-
+            // const data = await response.json();
+            // console.log(data)
             if (response.ok) {
                 selectEnelImplant(enelImplants.filter(imp => imp.id !== id));
-                console.log(`Implant con ID ${id} eliminato con successo`);
+                await new Promise(resolve => setTimeout(resolve, 100));
+                setSnackbarState({
+                    open: true,
+                    severity: 'success',
+                    message: 'Operazione eseguita con successo',
+                });
             } else {
-                console.error('Errore durante l\'eliminazione:', response.statusText);
+                setSnackbarState({
+                    open: true,
+                    severity: 'error',
+                    message: 'Errore nell\'esecuzione del comando',
+                });
             }
-
         } catch (error) {
-            console.error('Si è verificato un errore:', error);
+            setSnackbarState({
+                open: true,
+                severity: 'error',
+                message: 'Si è verificato un errore durante l\'eliminazione',
+            });
         }
     };
 
+    const handleCloseSnackbar = () => {
+        setSnackbarState(prev => ({ ...prev, open: false }));
+    };
+
     return (
-        <React.Fragment>
+        <>
             <Button
                 variant="outlined"
                 color="secondary"
@@ -62,7 +88,7 @@ function ButtonDelete({
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {`Eliminazione del record di ${enelImplant.name}`}
+                    {`Eliminazione del record di ${enelImplant.implant_name}`}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
@@ -76,7 +102,17 @@ function ButtonDelete({
                     </Button>
                 </DialogActions>
             </Dialog>
-        </React.Fragment>
+            <Snackbar open={snackbarState.open} autoHideDuration={3000} onClose={handleCloseSnackbar}>
+                <Alert
+                    onClose={handleCloseSnackbar}
+                    severity={snackbarState.severity}
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {snackbarState.message}
+                </Alert>
+            </Snackbar>
+        </>
     );
 }
 
