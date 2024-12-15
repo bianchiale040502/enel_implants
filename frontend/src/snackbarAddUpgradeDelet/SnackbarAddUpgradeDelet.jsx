@@ -1,30 +1,37 @@
-// import * as React from 'react';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import {
+    Snackbar,
+    Alert
+} from '@mui/material';
+import { useState, useEffect } from 'react';
 
 function SnackbarAddUpgradeDelet({
-    showAlertSnackBar,
-    setShowAlertSnackBar,
-    alertSnackBar,
-    // setAlertSnackBar
+    snackbarState,
+    setSnackbarState
 }) {
 
-    const handleCloseSnackbar = (event, reason) => {
+    function handleCloseSnackbar(event, reason) {
         if (reason === 'clickaway') {
             return;
         }
-        setShowAlertSnackBar(false);
-    };
+        setSnackbarState(prevState => ({
+            ...prevState,
+            open: false,
+        }));
+    }
 
     return (
-        <Snackbar open={showAlertSnackBar} autoHideDuration={3000} onClose={handleCloseSnackbar}>
+        <Snackbar
+            open={snackbarState.open}
+            autoHideDuration={1500}
+            onClose={handleCloseSnackbar}
+        >
             <Alert
                 onClose={handleCloseSnackbar}
-                severity={alertSnackBar ? 'success' : 'error'}
+                severity={snackbarState.severity}
                 variant="filled"
                 sx={{ width: '100%' }}
             >
-                {alertSnackBar ? 'Operazione eseguita con successo' : 'Errore nell\'esecuzione del comando'}
+                {snackbarState.message}
             </Alert>
         </Snackbar>
     );

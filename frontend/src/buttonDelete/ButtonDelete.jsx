@@ -6,24 +6,21 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Snackbar,
-    Alert
 } from '@mui/material';
-import { useState } from 'react';
-// import SnackbarAddUpgradeDelet from '../snackbarAddUpgradeDelet/SnackbarAddUpgradeDelet';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+import { useContext } from 'react';
+import { SnackBarContext } from '../contextFiles/SnackBarContext';
+import SnackbarAddUpgradeDelet from '../snackbarAddUpgradeDelet/snackbarAddUpgradeDelet';
 
 function ButtonDelete({
     selectEnelImplant,
     enelImplants,
-    enelImplant
+    enelImplant,
 }) {
 
-    const [snackbarState, setSnackbarState] = useState({
-        open: false,
-        severity: 'success',
-        message: '',
-    });
     const [open, setOpen] = React.useState(false);
+    const { snackbarState, setSnackbarState } = useContext(SnackBarContext);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -39,45 +36,40 @@ function ButtonDelete({
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Token ${localStorage.getItem('token')}`
-                }
+                    'Authorization': `Token ${localStorage.getItem('token')}`,
+                },
             });
-            // const data = await response.json();
-            // console.log(data)
+
             if (response.ok) {
                 selectEnelImplant(enelImplants.filter(imp => imp.id !== id));
-                await new Promise(resolve => setTimeout(resolve, 100));
                 setSnackbarState({
                     open: true,
                     severity: 'success',
-                    message: 'Operazione eseguita con successo',
+                    message: 'Eliminazione eseguita con successo',
                 });
             } else {
                 setSnackbarState({
                     open: true,
                     severity: 'error',
-                    message: 'Errore nell\'esecuzione del comando',
+                    message: "Errore nell'esecuzione del comando",
                 });
             }
         } catch (error) {
             setSnackbarState({
                 open: true,
                 severity: 'error',
-                message: 'Si è verificato un errore durante l\'eliminazione',
+                message: "Errore nell'esecuzione del comando",
             });
         }
-    };
-
-    const handleCloseSnackbar = () => {
-        setSnackbarState(prev => ({ ...prev, open: false }));
-    };
+    }
 
     return (
         <>
             <Button
                 variant="outlined"
-                color="secondary"
+                color="error"
                 onClick={handleClickOpen}
+                startIcon={<DeleteIcon />}
             >
                 Elimina
             </Button>
@@ -102,16 +94,10 @@ function ButtonDelete({
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={snackbarState.open} autoHideDuration={3000} onClose={handleCloseSnackbar}>
-                <Alert
-                    onClose={handleCloseSnackbar}
-                    severity={snackbarState.severity}
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >
-                    {snackbarState.message}
-                </Alert>
-            </Snackbar>
+            <SnackbarAddUpgradeDelet
+                snackbarState={snackbarState}
+                setSnackbarState={setSnackbarState}
+            />
         </>
     );
 }

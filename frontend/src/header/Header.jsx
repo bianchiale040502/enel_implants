@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { NavigationContext } from '../NavigationContext.jsx';
+import { NavigationContext } from '../contextFiles/NavigationContext.jsx';
 
 import {
     AppBar,

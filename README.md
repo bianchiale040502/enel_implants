@@ -44,52 +44,36 @@ source venv/bin/activate
 source venv\Scripts\activate
 ```
 
-### 4.5. Verificare se pip è già installato
-    pip --version
-- Se non è installato:
-```bash
-python -m ensurepip --default-pip`
-```
-
-### 4.6. Verificare se Django è già installato
-    pip freeze
-- Se non è installato:
-```bash
-python -m pip install Django
-```
-
-### 4.7. Creare 'requirements.txt' e aggiungere i pacchetti pip utlizzati
+### 4.5. Creare 'requirements.txt' e aggiungere i pacchetti pip utlizzati
     pip freeze > requirements.txt
-
 - N.B.: usare questo comando per aggiornare 'requirements.txt' se si installano altri pacchetti nel progetto con pip.
 
-### 4.8. Creare directory backend
+### 4.6. Creare directory backend
     django-admin startproject backend
 
-### 4.9. Entrare nella directory del progetto appena creato
+### 4.7. Entrare nella directory del progetto appena creato
     C:/Users/bianc/ProgettiApp/progetto_prova_finale/backend/backend
 
-### 4.10. Provare accensione server:
+### 4.8. Provare accensione server:
     python manage.py runserver
 - Per spgnere il server: CRTL+C
     
-### 4.11. Creare app implants
+### 4.9. Creare app implants
     python manage.py startapp implants
 
-### 4.12. Creare tabelle del database
+### 4.10. Creare tabelle del database
     python manage.py startapp migrate
 
-### 4.13. Inserire 'implants' in INSTALLED_APPS nel file settings.py
+### 4.11. Inserire 'implants' in INSTALLED_APPS nel file settings.py
 
-### 4.14. Se model.py viene modificato:
+### 4.12. Se model.py viene modificato:
     1. python manage.py startapp makemigrations
-
     2. python manage.py startapp migrate
 
-### 4.15. Creare utente
+### 4.13. Creare utente
     python manage.py createsuperuser
 
-### 4.16. Accendere server con porta 8080
+### 4.14. Accendere server con porta 8080
     python manage.py runserver 8080
 
 ## 5. Creazione Frontend
@@ -97,18 +81,7 @@ python -m pip install Django
 ### 5.1. Iniziare da directory:
     C:/Users/bianc/ProgettiApp/progetto_prova_finale
 
-### 5.2. Verificare se node.js è già installato
-    node -v
-- Se non è installato: https://nodejs.org/en/download/prebuilt-installer
-
-### 5.3. Verificare versione di npm:
-    npm -v
-- Per aggiornare npm all'ultima versione:
-```bash
-npm install -g npm
-```
-
-### 5.4. Creare struttura applicazione
+### 5.2. Creare struttura applicazione
     npm create vite@latest 
 
     Project Name: frontend
@@ -117,16 +90,16 @@ npm install -g npm
 
     Select a variant: » JavaScript
 
-### 5.5. Posizionarsi nella directory:
+### 5.3. Posizionarsi nella directory:
     C:/Users/bianc/ProgettiApp/progetto_prova_finale/frontend
 
-### 5.6. Installare dipendenze react e vite
+### 5.4. Installare dipendenze react e vite
     npm install
 
-### 5.7. Avviare server developer
+### 5.5. Avviare server developer
     npm run dev
 
-### 5.8. Commenta o cancella contenuto index.css
+### 5.6. Commenta o cancella contenuto index.css
 
-### 5.9. Installare pacchetti npm
+### 5.7. Installare pacchetti npm
     npm install @mui/icons-material @mui/material @emotion/styled @emotion/react

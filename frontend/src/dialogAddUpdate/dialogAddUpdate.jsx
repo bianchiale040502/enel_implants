@@ -12,11 +12,13 @@ import {
     Select,
     MenuItem,
     InputLabel,
-    Alert,
-    Snackbar
+    Tooltip
 } from '@mui/material';
-import { useState } from 'react';
-// import SnackbarAddUpgradeDelet from '../snackbarAddUpgradeDelet/SnackbarAddUpgradeDelet';
+import SaveIcon from '@mui/icons-material/Save';
+
+import { useContext, useState } from 'react';
+import { SnackBarContext } from '../contextFiles/SnackBarContext';
+import SnackbarAddUpgradeDelet from '../snackbarAddUpgradeDelet/snackbarAddUpgradeDelet';
 
 const COUNTRIES = [
     "Italia",
@@ -55,35 +57,75 @@ function DialogAddUpdate({
     open,
     openChange,
     currentImpianto,
-    currentImpiantoChange,
+    setCurrentImpianto,
     isEditing,
 }) {
     const [nameImplantError, setNameImplantError] = useState(false);
-    const [nameImplantErrorMessage, setNameImplantErrorMessage] = useState('');
     const [categoryError, setCategoryError] = useState(false);
-    const [categoryErrorMessage, setCategoryErrorMessage] = useState('');
     const [countryError, setCountryError] = useState(false);
-    const [countryErrorMessage, setCountryErrorMessage] = useState('');
-    const [showAlertSnackBar, setShowAlertSnackBar] = useState(false);
-    const [alertSnackBar, setAlertSnackBar] = useState(false);
+    const [operabilitytError, setOperabilityError] = useState(false);
+    const [numUnitError, setNumUnitError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [operabilityErrorMessage, setOperabilityErrorMessage] = useState('');
+    const [numUnitErrorMessage, setNumUnitErrorMessage] = useState('');
+
+    const { snackbarState, setSnackbarState } = useContext(SnackBarContext);
 
     function handleClose() {
         openChange(false);
         setNameImplantError(false);
-        setNameImplantErrorMessage('');
         setCategoryError(false);
-        setCategoryErrorMessage('');
         setCountryError(false);
-        setCountryErrorMessage('');
+        setOperabilityError(false);
+        setNumUnitError(false);
+        setErrorMessage('');
+        setOperabilityErrorMessage('');
+        setNumUnitErrorMessage('')
     };
 
     function handleChange(e) {
         const { name, value, type, checked } = e.target;
-        currentImpiantoChange(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked :
-                type === 'number' ? Number(value) : value
-        }));
+
+        setCurrentImpianto(prev => {
+
+            const updatedImpianto = {
+                ...prev,
+                [name]: type === 'checkbox' ? checked :
+                    type === 'number' ? Number(value) : value.trim()
+            };
+
+            if (name === 'num_unita_operativi' &&
+                updatedImpianto.num_unita_operativi <= updatedImpianto.num_unita_presenti) {
+                setNumUnitError(false);
+                setNumUnitErrorMessage('');
+            }
+
+            if (name === 'rated_power' && updatedImpianto.rated_power > 0) {
+                setOperabilityError(false);
+                setOperabilityErrorMessage('');
+            }
+
+            if (name === 'availability' && !checked) {
+                updatedImpianto.operability = false;
+                updatedImpianto.rated_power = 0;
+                updatedImpianto.num_unita_operativi = 0;
+                setOperabilityError(false);
+                setNumUnitError(false);
+                setOperabilityErrorMessage('');
+                setNumUnitErrorMessage('');
+            }
+
+            if (name === 'operability' && !checked) {
+                updatedImpianto.rated_power = 0;
+                updatedImpianto.num_unita_operativi = 0;
+                setOperabilityError(false);
+                setNumUnitError(false);
+                setOperabilityErrorMessage('');
+                setNumUnitErrorMessage('');
+            }
+
+            return updatedImpianto;
+        });
     };
 
     function validateInputs() {
@@ -92,29 +134,51 @@ function DialogAddUpdate({
 
         if (!currentImpianto.implant_name || currentImpianto.implant_name.trim() === '') {
             setNameImplantError(true);
-            setNameImplantErrorMessage('Il nome è obbligatorio');
+            setErrorMessage('Campo obbligatorio');
             isValid = false;
         } else {
             setNameImplantError(false);
-            setNameImplantErrorMessage('');
+            setErrorMessage('');
         }
 
         if (!currentImpianto.category) {
             setCategoryError(true);
-            setCategoryErrorMessage('La categoria è obbligatoria');
+            setErrorMessage('Campo obbligatorio');
             isValid = false;
         } else {
             setCategoryError(false);
-            setCategoryErrorMessage('');
+            setErrorMessage('');
         }
 
         if (!currentImpianto.country) {
             setCountryError(true);
-            setCountryErrorMessage('Il paese è obbligatorio');
+            setErrorMessage('Campo obbligatorio');
             isValid = false;
         } else {
             setCountryError(false);
-            setCountryErrorMessage('');
+            setErrorMessage('');
+        }
+
+        if (currentImpianto.operability && currentImpianto.rated_power === 0) {
+            setOperabilityError(true);
+            setOperabilityErrorMessage('Campo obbligatorio quando l\'impianto è operativo.');
+            isValid = false;
+        } else {
+            setOperabilityError(false);
+            setOperabilityErrorMessage('');
+        }
+
+        if (currentImpianto.num_unita_operativi > currentImpianto.num_unita_presenti) {
+            setNumUnitError(true);
+            setNumUnitErrorMessage('Le unità operative non possono superare le unità presenti.');
+            isValid = false;
+        } else if (currentImpianto.operability && currentImpianto.num_unita_operativi === 0) {
+            setNumUnitError(true);
+            setNumUnitErrorMessage('Campo obbligatorio quando l\'impianto è operativo.');
+            isValid = false;
+        } else {
+            setNumUnitError(false);
+            setNumUnitErrorMessage('');
         }
 
         return isValid;
@@ -142,18 +206,26 @@ function DialogAddUpdate({
             const data = await response.json();
             if (response.ok) {
                 selectEnelImplant([...enelImplants, data]);
-                setAlertSnackBar(true);
-                openChange(false);
+                setSnackbarState({
+                    open: true,
+                    severity: 'success',
+                    message: 'Impianto aggiunto con successo',
+                });
             } else {
-                setAlertSnackBar(false);
-                openChange(false);
-                // throw new Error('Errore durante l\'aggiunta dell\'impianto');
+                setSnackbarState({
+                    open: false,
+                    severity: 'error',
+                    message: 'Errore nell\'esecuzione del comando',
+                });
             }
         } catch (error) {
-            setAlertSnackBar(false);
-            openChange(false);
+            setSnackbarState({
+                open: false,
+                severity: 'error',
+                message: 'Errore nell\'esecuzione del comando',
+            });
         } finally {
-            setShowAlertSnackBar(true)
+            openChange(false);
         }
     };
 
@@ -162,7 +234,6 @@ function DialogAddUpdate({
         if (!validateInputs()) return;
 
         const today = new Date().getTime();
-        currentImpianto.dateLastUpdate = today;
 
         try {
             const response = await fetch(`http://127.0.0.1:8080/api/implants/${currentImpianto.id}/`, {
@@ -175,29 +246,33 @@ function DialogAddUpdate({
             });
             const data = await response.json();
             if (response.ok) {
+                currentImpianto.dateLastUpdate = today;
                 selectEnelImplant(
                     enelImplants.map(imp =>
                         imp.id === data.id ? data : imp
                     )
                 );
-                setAlertSnackBar(true);
+                setSnackbarState({
+                    open: true,
+                    severity: 'success',
+                    message: 'Impianto modificato con successo',
+                });
             } else {
-                setAlertSnackBar(false);
-                throw new Error('Errore durante l\'aggiunta dell\'impianto');
+                setSnackbarState({
+                    open: false,
+                    severity: 'error',
+                    message: 'Errore nell\'esecuzione del comando',
+                });
             }
         } catch (error) {
-            setAlertSnackBar(false);
+            setSnackbarState({
+                open: false,
+                severity: 'error',
+                message: 'Errore nell\'esecuzione del comando',
+            });
         } finally {
             openChange(false);
-            setShowAlertSnackBar(true);
-        };
-    };
-
-    const handleCloseSnackbar = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
         }
-        setShowAlertSnackBar(false);
     };
 
     return (
@@ -217,7 +292,7 @@ function DialogAddUpdate({
                         onChange={handleChange}
                         required
                         error={nameImplantError}
-                        helperText={nameImplantErrorMessage}
+                        helperText={nameImplantError ? errorMessage : ''}
                     />
 
                     <FormControl
@@ -234,7 +309,7 @@ function DialogAddUpdate({
                             value={currentImpianto.category || ''}
                             onChange={handleChange}
                         >
-                            {CATEGORIES.map((category, index) => (
+                            {CATEGORIES.sort().map((category, index) => (
                                 <MenuItem key={index} value={category}>
                                     {category}
                                 </MenuItem>
@@ -242,7 +317,7 @@ function DialogAddUpdate({
                         </Select>
                         {categoryError &&
                             <FormHelperText>
-                                {categoryErrorMessage}
+                                {errorMessage}
                             </FormHelperText>
                         }
                     </FormControl>
@@ -255,12 +330,13 @@ function DialogAddUpdate({
                     >
                         <InputLabel>Paese</InputLabel>
                         <Select
+                            margin="dense"
                             name="country"
                             label="Paese"
                             value={currentImpianto.country || ''}
                             onChange={handleChange}
                         >
-                            {COUNTRIES.map((country, index) => (
+                            {COUNTRIES.sort().map((country, index) => (
                                 <MenuItem key={index} value={country}>
                                     {country}
                                 </MenuItem>
@@ -268,20 +344,27 @@ function DialogAddUpdate({
                         </Select>
                         {countryError &&
                             <FormHelperText>
-                                {countryErrorMessage}
+                                {errorMessage}
                             </FormHelperText>
                         }
                     </FormControl>
 
-                    <TextField
-                        margin="dense"
-                        name="rated_power"
-                        label="Potenza Nominale (MW)"
-                        type="number"
-                        fullWidth
-                        value={currentImpianto.rated_power}
-                        onChange={handleChange}
-                    />
+                    <Tooltip title={currentImpianto.availability && currentImpianto.operability ? '' : 'Impianto opertivo necessario'}>
+                        <span>
+                            <TextField
+                                margin="dense"
+                                name="rated_power"
+                                label="Potenza Nominale (MW)"
+                                type="number"
+                                fullWidth
+                                value={currentImpianto.rated_power}
+                                onChange={handleChange}
+                                disabled={!currentImpianto.availability || !currentImpianto.operability}
+                                error={operabilitytError}
+                                helperText={operabilitytError ? operabilityErrorMessage : ''}
+                            />
+                        </span>
+                    </Tooltip>
 
                     <TextField
                         margin="dense"
@@ -293,32 +376,44 @@ function DialogAddUpdate({
                         onChange={handleChange}
                     />
 
-                    <TextField
-                        margin="dense"
-                        name="num_unita_operativi"
-                        label="Numero Unità Operative"
-                        type="number"
-                        fullWidth
-                        value={currentImpianto.num_unita_operativi}
-                        onChange={handleChange}
-                    />
-
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={currentImpianto.operability}
+                    <Tooltip title={currentImpianto.availability && currentImpianto.operability ? '' : 'Impianto opertivo necessario'}>
+                        <span>
+                            <TextField
+                                margin="dense"
+                                name="num_unita_operativi"
+                                label="Numero Unità Operative"
+                                type="number"
+                                fullWidth
+                                value={currentImpianto.num_unita_operativi}
                                 onChange={handleChange}
-                                name="operability"
-                                color="primary"
+                                disabled={!currentImpianto.availability || !currentImpianto.operability}
+                                error={numUnitError}
+                                helperText={numUnitError ? numUnitErrorMessage : ''}
                             />
-                        }
-                        label="Operabilità"
-                    />
+                        </span>
+                    </Tooltip>
+
+                    <Tooltip title={currentImpianto.availability ? '' : 'Disponibilità impianto necessario'}>
+                        <span>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={currentImpianto.operability || false}
+                                        onChange={handleChange}
+                                        name="operability"
+                                        color="primary"
+                                        disabled={!currentImpianto.availability}
+                                    />
+                                }
+                                label="Operabilità"
+                            />
+                        </span>
+                    </Tooltip>
 
                     <FormControlLabel
                         control={
                             <Switch
-                                checked={currentImpianto.availability}
+                                checked={currentImpianto.availability || false}
                                 onChange={handleChange}
                                 name="availability"
                                 color="primary"
@@ -329,33 +424,27 @@ function DialogAddUpdate({
                 </DialogContent>
 
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={handleClose}
+                    >
                         Annulla
                     </Button>
                     <Button
-                        onClick={isEditing ? handleEdit : handleAdd}
+                        variant="outlined"
                         color="primary"
+                        startIcon={<SaveIcon />}
+                        onClick={isEditing ? handleEdit : handleAdd}
                     >
                         {isEditing ? 'Salva' : 'Aggiungi'}
                     </Button>
                 </DialogActions>
             </Dialog>
-            {/* <SnackbarAddUpgradeDelet
-                showAlertSnackBar={showAlertSnackBar}
-                setShowAlertSnackBar={setShowAlertSnackBar}
-                alertSnackBar={alertSnackBar}
-                setAlertSnackBar={setAlertSnackBar}
-            /> */}
-            <Snackbar open={showAlertSnackBar} autoHideDuration={3000} onClose={handleCloseSnackbar}>
-                <Alert
-                    onClose={handleCloseSnackbar}
-                    severity={alertSnackBar ? 'success' : 'error'}
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >
-                    {alertSnackBar ? 'Operazione eseguita con successo' : 'Errore nell\'esecuzione del comando'}
-                </Alert>
-            </Snackbar>
+            <SnackbarAddUpgradeDelet
+                snackbarState={snackbarState}
+                setSnackbarState={setSnackbarState}
+            />
         </>
     );
 }

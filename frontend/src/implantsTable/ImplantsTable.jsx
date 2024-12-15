@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavigationContext } from '../NavigationContext';
+import { NavigationContext } from '../contextFiles/NavigationContext';
 
 import {
     Table,
@@ -23,7 +23,7 @@ function ImplantTable({
     selectCategory,
     selectCountry,
     operabilityOnly,
-    availabilityOnly
+    availabilityOnly,
 }) {
 
     const boxCell = {
@@ -38,9 +38,10 @@ function ImplantTable({
         category: "",
         country: "",
         rated_power: 0,
-        num_unita_presenti: 0,
-        operability: false,
-        availability: false
+        num_unita_presenti: 1,
+        num_unita_operativi: 0,
+        operability: true,
+        availability: true
     });
     const [isEditing, setIsEditing] = useState(false);
 
@@ -74,7 +75,7 @@ function ImplantTable({
                 enelImplants={enelImplants}
                 enelImplant={enelImplant}
                 openChange={setOpen}
-                currentImpiantoChange={setCurrentImpianto}
+                setCurrentImpianto={setCurrentImpianto}
                 isEditingChange={setIsEditing}
                 key={enelImplant.id}
             />
@@ -86,7 +87,7 @@ function ImplantTable({
             {isLoggedin && (
                 <ButtonAddUpgrade
                     openChange={setOpen}
-                    currentImpiantoChange={setCurrentImpianto}
+                    setCurrentImpianto={setCurrentImpianto}
                     isEditingChange={setIsEditing}
                 />
             )}
@@ -170,7 +171,7 @@ function ImplantTable({
                 open={open}
                 openChange={setOpen}
                 currentImpianto={currentImpianto}
-                currentImpiantoChange={setCurrentImpianto}
+                setCurrentImpianto={setCurrentImpianto}
                 isEditing={isEditing}
             />
         </>

@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import { NavigationProvider } from './NavigationContext.jsx';
+import { NavigationProvider } from './contextFiles/NavigationContext.jsx';
 import App from './App.jsx'
 import './index.css'
 

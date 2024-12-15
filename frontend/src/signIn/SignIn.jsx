@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useContext, useState } from 'react';
-import { NavigationContext } from '../NavigationContext';
+import { NavigationContext } from '../contextFiles/NavigationContext';
 
 import {
     Box,

@@ -45,10 +45,10 @@ function SearchBar({
                 <Select
                     name="searchCategory"
                     multiple
-                    value={selectCategory}
-                    onChange={(e) => selectCategoryChange(e.target.value)}
+                    value={Array.isArray(selectCategory) ? selectCategory : []}
+                    onChange={(e) => selectCategoryChange(e.target.value) ? e.target.value : []}
                     label="Tipo di impianto"
-                    renderValue={(selected) => selected.join(", ")}
+                    renderValue={(selected) => { return Array.isArray(selected) && selected.join(", ") }}
                 >
                     {category.map((option, index) => (
                         <MenuItem key={index} value={option}>
@@ -67,10 +67,10 @@ function SearchBar({
                 <Select
                     name="searchCountry"
                     multiple
-                    value={selectCountry}
-                    onChange={(e) => selectCountryChange(e.target.value)}
+                    value={Array.isArray(selectCountry) ? selectCountry : []}
+                    onChange={(e) => selectCountryChange(e.target.value) ? e.target.value : []}
                     label="Paese"
-                    renderValue={(selected) => selected.join(", ")}
+                    renderValue={(selected) => { return Array.isArray(selected) && selected.join(", ") }}
                 >
                     {country.map((option, index) => (
                         <MenuItem key={index} value={option}>

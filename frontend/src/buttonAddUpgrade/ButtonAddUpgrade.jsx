@@ -1,26 +1,28 @@
 import { Button } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 
 function ButtonAddUpgrade({
     enelImplant,
     openChange,
-    currentImpiantoChange,
+    setCurrentImpianto,
     isEditingChange
 }) {
-    function handleOpen(enelImplant) {
+    const handleOpen = (enelImplant) => {
         if (enelImplant) {
             isEditingChange(true);
-            currentImpiantoChange(enelImplant);
+            setCurrentImpianto(enelImplant);
         } else {
             isEditingChange(false);
-            currentImpiantoChange({
+            setCurrentImpianto({
                 implant_name: "",
                 category: "",
                 country: "",
                 rated_power: 0,
-                num_unita_presenti: 0,
+                num_unita_presenti: 1,
                 num_unita_operativi: 0,
-                operability: false,
-                availability: false
+                operability: true,
+                availability: true
             });
         }
         openChange(true);
@@ -31,8 +33,9 @@ function ButtonAddUpgrade({
                 <Button
                     variant="outlined"
                     color="primary"
-                    onClick={() => handleOpen(enelImplant)}
                     fullWidth
+                    startIcon={<EditIcon />}
+                    onClick={() => handleOpen(enelImplant)}
                 >
                     Modifica
                 </Button>
@@ -40,6 +43,7 @@ function ButtonAddUpgrade({
                 <Button
                     variant="contained"
                     color="primary"
+                    startIcon={<AddIcon />}
                     onClick={() => handleOpen()}
                     sx={{ mb: 2 }}
                 >

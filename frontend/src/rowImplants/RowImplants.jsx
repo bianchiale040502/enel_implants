@@ -1,11 +1,12 @@
 import React from 'react';
-import { NavigationContext } from '../NavigationContext';
+import { NavigationContext } from '../contextFiles/NavigationContext';
 
 import {
     TableCell,
     TableRow,
     Stack,
-    Box
+    Box,
+    Tooltip
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -20,8 +21,8 @@ function RowImplants({
     enelImplants,
     enelImplant,
     openChange,
-    currentImpiantoChange,
-    isEditingChange
+    setCurrentImpianto,
+    isEditingChange,
 }) {
 
     const boxCell = {
@@ -29,6 +30,25 @@ function RowImplants({
         justifyContent: "center",
         textAlign: "center"
     }
+
+    const CustomTooltip = ({ title, children }) => (
+        <Tooltip
+            title={title}
+            placement="top"
+            slotProps={{
+                popper: {
+                    modifiers: [
+                        {
+                            name: 'offset',
+                            options: { offset: [0, -12] },
+                        },
+                    ],
+                },
+            }}
+        >
+            {children}
+        </Tooltip>
+    );
 
     const lastUpdateDate = new Date(enelImplant.dateLastUpdate);
 
@@ -46,9 +66,13 @@ function RowImplants({
             <TableCell>
                 <Box style={boxCell}>
                     {updateRequired ? (
-                        <WarningIcon color="error" sx={{ fontSize: 30 }} />
+                        <CustomTooltip title="Non Aggiornato">
+                            <WarningIcon color="error" sx={{ fontSize: 30 }} />
+                        </CustomTooltip>
                     ) : (
-                        <CheckCircleOutlineIcon color="success" sx={{ fontSize: 40 }} />
+                        <CustomTooltip title="Aggiornato">
+                            <CheckCircleOutlineIcon color="success" sx={{ fontSize: 40 }} />
+                        </CustomTooltip>
                     )}
                 </Box>
                 <Box style={boxCell}
@@ -90,18 +114,26 @@ function RowImplants({
             <TableCell>
                 <Box style={boxCell}>
                     {enelImplant.operability ?
-                        <CheckCircleOutlineIcon color="success" sx={{ fontSize: 40 }} />
+                        <CustomTooltip title="Operativo">
+                            <CheckCircleOutlineIcon color="success" sx={{ fontSize: 40 }} />
+                        </CustomTooltip>
                         :
-                        <WarningIcon color="error" sx={{ fontSize: 40 }} />
+                        <CustomTooltip title="Non Operativo">
+                            <WarningIcon color="error" sx={{ fontSize: 40 }} />
+                        </CustomTooltip>
                     }
                 </Box>
             </TableCell>
             <TableCell>
                 <Box style={boxCell}>
                     {enelImplant.availability ?
-                        <CheckCircleOutlineIcon color="success" sx={{ fontSize: 40 }} />
+                        <CustomTooltip title="Disponibile">
+                            <CheckCircleOutlineIcon color="success" sx={{ fontSize: 40 }} />
+                        </CustomTooltip>
                         :
-                        <WarningIcon color="error" sx={{ fontSize: 40 }} />
+                        <CustomTooltip title="Non Disponibile">
+                            <WarningIcon color="error" sx={{ fontSize: 40 }} />
+                        </CustomTooltip>
                     }
                 </Box>
             </TableCell>
@@ -111,7 +143,7 @@ function RowImplants({
                         <ButtonAddUpgrade
                             enelImplant={enelImplant}
                             openChange={openChange}
-                            currentImpiantoChange={currentImpiantoChange}
+                            setCurrentImpianto={setCurrentImpianto}
                             isEditingChange={isEditingChange}
                         />
                         <ButtonDelete
