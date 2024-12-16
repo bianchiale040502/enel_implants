@@ -63,6 +63,7 @@ function DialogAddUpdate({
     const [nameImplantError, setNameImplantError] = useState(false);
     const [categoryError, setCategoryError] = useState(false);
     const [countryError, setCountryError] = useState(false);
+    const [numUnitObbError, setNumUnitObbError] = useState(false);
     const [operabilitytError, setOperabilityError] = useState(false);
     const [numUnitError, setNumUnitError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -76,6 +77,7 @@ function DialogAddUpdate({
         setNameImplantError(false);
         setCategoryError(false);
         setCountryError(false);
+        setNumUnitObbError(false);
         setOperabilityError(false);
         setNumUnitError(false);
         setErrorMessage('');
@@ -159,6 +161,15 @@ function DialogAddUpdate({
             setErrorMessage('');
         }
 
+        if (currentImpianto.num_unita_presenti <= 0) {
+            setNumUnitObbError(true);
+            setErrorMessage('Campo obbligatorio');
+            isValid = false;
+        } else {
+            setNumUnitObbError(false);
+            setErrorMessage('');
+        }
+
         if (currentImpianto.operability && currentImpianto.rated_power === 0) {
             setOperabilityError(true);
             setOperabilityErrorMessage('Campo obbligatorio quando l\'impianto è operativo.');
@@ -213,14 +224,14 @@ function DialogAddUpdate({
                 });
             } else {
                 setSnackbarState({
-                    open: false,
+                    open: true,
                     severity: 'error',
                     message: 'Errore nell\'esecuzione del comando',
                 });
             }
         } catch (error) {
             setSnackbarState({
-                open: false,
+                open: true,
                 severity: 'error',
                 message: 'Errore nell\'esecuzione del comando',
             });
@@ -259,14 +270,14 @@ function DialogAddUpdate({
                 });
             } else {
                 setSnackbarState({
-                    open: false,
+                    open: true,
                     severity: 'error',
                     message: 'Errore nell\'esecuzione del comando',
                 });
             }
         } catch (error) {
             setSnackbarState({
-                open: false,
+                open: true,
                 severity: 'error',
                 message: 'Errore nell\'esecuzione del comando',
             });
@@ -349,31 +360,17 @@ function DialogAddUpdate({
                         }
                     </FormControl>
 
-                    <Tooltip title={currentImpianto.availability && currentImpianto.operability ? '' : 'Impianto opertivo necessario'}>
-                        <span>
-                            <TextField
-                                margin="dense"
-                                name="rated_power"
-                                label="Potenza Nominale (MW)"
-                                type="number"
-                                fullWidth
-                                value={currentImpianto.rated_power}
-                                onChange={handleChange}
-                                disabled={!currentImpianto.availability || !currentImpianto.operability}
-                                error={operabilitytError}
-                                helperText={operabilitytError ? operabilityErrorMessage : ''}
-                            />
-                        </span>
-                    </Tooltip>
-
                     <TextField
                         margin="dense"
                         name="num_unita_presenti"
                         label="Numero Unità"
                         type="number"
+                        required
                         fullWidth
                         value={currentImpianto.num_unita_presenti}
                         onChange={handleChange}
+                        error={numUnitObbError}
+                        helperText={numUnitObbError ? errorMessage : ''}
                     />
 
                     <Tooltip title={currentImpianto.availability && currentImpianto.operability ? '' : 'Impianto opertivo necessario'}>
@@ -392,6 +389,24 @@ function DialogAddUpdate({
                             />
                         </span>
                     </Tooltip>
+
+                    <Tooltip title={currentImpianto.availability && currentImpianto.operability ? '' : 'Impianto opertivo necessario'}>
+                        <span>
+                            <TextField
+                                margin="dense"
+                                name="rated_power"
+                                label="Potenza Nominale (MW)"
+                                type="number"
+                                fullWidth
+                                value={currentImpianto.rated_power}
+                                onChange={handleChange}
+                                disabled={!currentImpianto.availability || !currentImpianto.operability}
+                                error={operabilitytError}
+                                helperText={operabilitytError ? operabilityErrorMessage : ''}
+                            />
+                        </span>
+                    </Tooltip>
+
 
                     <Tooltip title={currentImpianto.availability ? '' : 'Disponibilità impianto necessario'}>
                         <span>
