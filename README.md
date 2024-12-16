@@ -54,7 +54,6 @@ source venv\Scripts\activate
 
 ### 3.8. Provare accensione server:
     python manage.py runserver
-- Per spgnere il server: CRTL+C
     
 ### 3.9. Creare app implants
     python manage.py startapp implants
@@ -73,6 +72,10 @@ source venv\Scripts\activate
 
 ### 3.14. Accendere server con porta 8080
     python manage.py runserver 8080
+
+### 3.15 Creare gruppo "Admins" in Groups (no permessi)
+
+### 3.16 Creare admin/admins di prova in Users e inserirlo/inserirli nel gruppo "Admins"
 
 ## 4. Creazione Frontend
 
