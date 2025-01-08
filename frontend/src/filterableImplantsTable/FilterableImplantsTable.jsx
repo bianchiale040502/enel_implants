@@ -11,13 +11,21 @@ function FilterableImplantsTable() {
     const [selectCategory, setSelectCategory] = useState([]);
     const [selectCountry, setSelectCountry] = useState([]);
     const [enelImplants, setImplants] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         async function download() {
             fetch("http://127.0.0.1:8080/api/implants/")
                 .then(response => response.json())
                 .then(formatted_data => {
                     setImplants(formatted_data)
+                })
+                .catch(error => {
+                    console.error("Errore nel recupero dei dati:", error);
+                })
+                .finally(() => {
+                    setLoading(false); // Assicura che loading sia false
                 });
         }
         download();
@@ -57,6 +65,7 @@ function FilterableImplantsTable() {
                     selectCountry={Array.isArray(selectCountry) ? selectCountry : []}
                     operabilityOnly={operabilityOnly}
                     availabilityOnly={availabilityOnly}
+                    loading={loading}
                 />
             </SnackBarProvider>
         </>

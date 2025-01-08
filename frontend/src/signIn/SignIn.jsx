@@ -13,7 +13,8 @@ import {
     Alert,
     AlertTitle,
     Card as MuiCard,
-    styled
+    styled,
+    CircularProgress
 } from '@mui/material';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -38,15 +39,20 @@ function SignIn() {
     const [loginError, setLoginError] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const { login } = useContext(NavigationContext);
 
-    async function handleSubmit(e) {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!validateInputs()) return;
 
+        setIsLoading(true);
+
         const response = await login(username, password);
+
+        setIsLoading(false);
 
         if (!response.success) {
             if (response.code === 401) {
@@ -64,7 +70,7 @@ function SignIn() {
         }
     }
 
-    function validateInputs() {
+    const validateInputs = () => {
 
         let isValid = true;
 
@@ -91,68 +97,73 @@ function SignIn() {
 
     return (
         <Stack sx={{ padding: 10 }}>
-            <Card variant="outlined">
-                <Typography
-                    component="h1"
-                    variant="h4"
-                >
-                    Sign in
-                </Typography>
-                <Box
-                    component="form"
-                    onSubmit={handleSubmit}
-                    noValidate
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                    }}
-                >
-                    <FormControl>
-                        <FormLabel htmlFor="username">Usename</FormLabel>
-                        <TextField
-                            error={usernameError}
-                            helperText={usernameErrorMessage}
-                            id="username"
-                            type="text"
-                            name="username"
-                            placeholder="username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                            fullWidth
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <FormLabel htmlFor="password">Password</FormLabel>
-                        <TextField
-                            error={passwordError}
-                            helperText={passwordErrorMessage}
-                            id="password"
-                            type="password"
-                            name="password"
-                            placeholder="••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            fullWidth
-                        />
-                    </FormControl>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        fullWidth
+            {isLoading ? (
+                <CircularProgress sx={{ alignSelf: 'center' }} />
+            ) : (
+
+                <Card variant="outlined">
+                    <Typography
+                        component="h1"
+                        variant="h4"
                     >
                         Sign in
-                    </Button>
-                    {loginError && (
-                        <Alert severity="error">
-                            <AlertTitle>Errore</AlertTitle>
-                            {loginError}
-                        </Alert>
-                    )}
-                </Box>
-            </Card>
+                    </Typography>
+                    <Box
+                        component="form"
+                        onSubmit={handleSubmit}
+                        noValidate
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 2,
+                        }}
+                    >
+                        <FormControl>
+                            <FormLabel htmlFor="username">Usename</FormLabel>
+                            <TextField
+                                error={usernameError}
+                                helperText={usernameErrorMessage}
+                                id="username"
+                                type="text"
+                                name="username"
+                                placeholder="username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                                fullWidth
+                            />
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel htmlFor="password">Password</FormLabel>
+                            <TextField
+                                error={passwordError}
+                                helperText={passwordErrorMessage}
+                                id="password"
+                                type="password"
+                                name="password"
+                                placeholder="••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                fullWidth
+                            />
+                        </FormControl>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            fullWidth
+                        >
+                            Sign in
+                        </Button>
+                        {loginError && (
+                            <Alert severity="error">
+                                <AlertTitle>Errore</AlertTitle>
+                                {loginError}
+                            </Alert>
+                        )}
+                    </Box>
+                </Card>
+            )}
         </Stack >
     );
 }

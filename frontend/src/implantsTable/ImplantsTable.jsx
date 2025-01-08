@@ -9,7 +9,8 @@ import {
     TableHead,
     TableRow,
     Box,
-    Paper
+    Paper,
+    CircularProgress
 } from '@mui/material';
 import RowImplants from '../rowImplants/RowImplants';
 import DialogAddUpdate from '../dialogAddUpdate/dialogAddUpdate';
@@ -24,6 +25,7 @@ function ImplantTable({
     selectCountry,
     operabilityOnly,
     availabilityOnly,
+    loading
 }) {
 
     const boxCell = {
@@ -149,7 +151,7 @@ function ImplantTable({
                             )}
                         </TableRow>
                     </TableHead>
-                    <TableBody>
+                    {/* <TableBody>
                         {rowsImplants.length > 0 ? (
                             rowsImplants
                         ) : (
@@ -158,7 +160,24 @@ function ImplantTable({
                                     colSpan={9}
                                     align="center"
                                 >
-                                    Nessun impianto trovato
+                                    Nessun impianto presente
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody> */}
+                    <TableBody>
+                        {loading ? (
+                            <TableRow>
+                                <TableCell colSpan={10} align="center">
+                                    <CircularProgress />
+                                </TableCell>
+                            </TableRow>
+                        ) : rowsImplants.length > 0 ? (
+                            rowsImplants
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={10} align="center">
+                                    Nessun impianto presente
                                 </TableCell>
                             </TableRow>
                         )}

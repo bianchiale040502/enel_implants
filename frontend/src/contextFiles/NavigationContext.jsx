@@ -62,7 +62,7 @@ export const NavigationProvider = ({ children }) => {
         }
     }
 
-    function logout() {
+    const logout = () => {
         setToken(null);
         localStorage.removeItem('token');
         setIsLoggedin(false);
