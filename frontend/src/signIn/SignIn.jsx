@@ -149,6 +149,7 @@ function SignIn() {
                             />
                         </FormControl>
                         <Button
+                            id="sign_in_button"
                             type="submit"
                             variant="contained"
                             fullWidth
