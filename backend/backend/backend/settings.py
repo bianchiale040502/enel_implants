@@ -131,7 +131,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:5175",
-    "https://6c20-213-182-74-37.ngrok-free.app"
+    "https://c7de-87-1-247-205.ngrok-free.app"
 ]
 
 REST_FRAMEWORK = {
