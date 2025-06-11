@@ -245,6 +245,7 @@ function DialogAddUpdate({
         if (!validateInputs()) return;
 
         const today = new Date().getTime();
+        currentImpianto.dateLastUpdate = today;
 
         try {
             const response = await fetch(`http://127.0.0.1:8080/api/implants/${currentImpianto.id}/`, {
@@ -257,7 +258,6 @@ function DialogAddUpdate({
             });
             const data = await response.json();
             if (response.ok) {
-                currentImpianto.dateLastUpdate = today;
                 selectEnelImplant(
                     enelImplants.map(imp =>
                         imp.id === data.id ? data : imp
@@ -452,7 +452,7 @@ function DialogAddUpdate({
                         startIcon={<SaveIcon />}
                         onClick={isEditing ? handleEdit : handleAdd}
                     >
-                        {isEditing ? 'Salva' : 'Aggiungi'}
+                        Salva
                     </Button>
                 </DialogActions>
             </Dialog>
