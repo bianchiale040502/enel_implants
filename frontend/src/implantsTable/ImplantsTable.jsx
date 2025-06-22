@@ -119,17 +119,17 @@ function ImplantTable({
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
                                 <Box style={boxCell}>
-                                    Potenza nominale in MW
-                                </Box>
-                            </TableCell>
-                            <TableCell sx={{ fontWeight: 'bold' }}>
-                                <Box style={boxCell}>
                                     Num. Unità
                                 </Box>
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
                                 <Box style={boxCell}>
                                     Num. Unità operative
+                                </Box>
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 'bold' }}>
+                                <Box style={boxCell}>
+                                    Potenza nominale in MW
                                 </Box>
                             </TableCell>
                             <TableCell sx={{ fontWeight: 'bold' }}>
@@ -151,20 +151,6 @@ function ImplantTable({
                             )}
                         </TableRow>
                     </TableHead>
-                    {/* <TableBody>
-                        {rowsImplants.length > 0 ? (
-                            rowsImplants
-                        ) : (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={9}
-                                    align="center"
-                                >
-                                    Nessun impianto presente
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody> */}
                     <TableBody>
                         {loading ? (
                             <TableRow>

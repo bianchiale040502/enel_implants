@@ -15,7 +15,7 @@ import {
     Tooltip
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
-
+import { NumericFormat } from "react-number-format";
 import { useContext, useState } from 'react';
 import { SnackBarContext } from '../contextFiles/SnackBarContext';
 import SnackbarAddUpgradeDelet from '../snackbarAddUpgradeDelet/snackbarAddUpgradeDelet';
@@ -161,7 +161,7 @@ function DialogAddUpdate({
             setErrorMessage('');
         }
 
-        if (currentImpianto.num_unita_presenti <= 0) {
+        if (currentImpianto.num_unita_presenti <= 0 || !currentImpianto.num_unita_presenti) {
             setNumUnitObbError(true);
             setErrorMessage('Campo obbligatorio');
             isValid = false;
@@ -170,7 +170,8 @@ function DialogAddUpdate({
             setErrorMessage('');
         }
 
-        if (currentImpianto.operability && currentImpianto.rated_power === 0) {
+
+        if (currentImpianto.operability && (currentImpianto.rated_power === 0 || !currentImpianto.rated_power)) {
             setOperabilityError(true);
             setOperabilityErrorMessage('Campo obbligatorio quando l\'impianto è operativo.');
             isValid = false;
@@ -183,7 +184,7 @@ function DialogAddUpdate({
             setNumUnitError(true);
             setNumUnitErrorMessage('Le unità operative non possono superare le unità presenti.');
             isValid = false;
-        } else if (currentImpianto.operability && currentImpianto.num_unita_operativi === 0) {
+        } else if (currentImpianto.operability && (currentImpianto.num_unita_operativi === 0 || !currentImpianto.num_unita_operativi)) {
             setNumUnitError(true);
             setNumUnitErrorMessage('Campo obbligatorio quando l\'impianto è operativo.');
             isValid = false;
@@ -360,29 +361,47 @@ function DialogAddUpdate({
                         }
                     </FormControl>
 
-                    <TextField
+                    <NumericFormat
                         margin="dense"
                         name="num_unita_presenti"
                         label="Numero Unità"
-                        type="number"
                         required
                         fullWidth
+                        customInput={TextField}
+                        allowNegative={false}
                         value={currentImpianto.num_unita_presenti}
-                        onChange={handleChange}
+                        onValueChange={({ floatValue }) => {
+                            handleChange({
+                                target: {
+                                    name: "num_unita_presenti",
+                                    value: floatValue,
+                                    type: "number",
+                                },
+                            });
+                        }}
                         error={numUnitObbError}
                         helperText={numUnitObbError ? errorMessage : ''}
                     />
 
                     <Tooltip title={currentImpianto.availability && currentImpianto.operability ? '' : 'Impianto opertivo necessario'}>
                         <span>
-                            <TextField
+                            <NumericFormat
                                 margin="dense"
                                 name="num_unita_operativi"
                                 label="Numero Unità Operative"
-                                type="number"
                                 fullWidth
+                                customInput={TextField}
+                                allowNegative={false}
                                 value={currentImpianto.num_unita_operativi}
-                                onChange={handleChange}
+                                onValueChange={({ floatValue }) => {
+                                    handleChange({
+                                        target: {
+                                            name: "num_unita_operativi",
+                                            value: floatValue,
+                                            type: "number",
+                                        },
+                                    });
+                                }}
                                 disabled={!currentImpianto.availability || !currentImpianto.operability}
                                 error={numUnitError}
                                 helperText={numUnitError ? numUnitErrorMessage : ''}
@@ -392,21 +411,29 @@ function DialogAddUpdate({
 
                     <Tooltip title={currentImpianto.availability && currentImpianto.operability ? '' : 'Impianto opertivo necessario'}>
                         <span>
-                            <TextField
+                            <NumericFormat
                                 margin="dense"
                                 name="rated_power"
                                 label="Potenza Nominale (MW)"
-                                type="number"
                                 fullWidth
+                                customInput={TextField}
+                                allowNegative={false}
                                 value={currentImpianto.rated_power}
-                                onChange={handleChange}
+                                onValueChange={({ floatValue }) => {
+                                    handleChange({
+                                        target: {
+                                            name: "rated_power",
+                                            value: floatValue,
+                                            type: "number",
+                                        },
+                                    });
+                                }}
                                 disabled={!currentImpianto.availability || !currentImpianto.operability}
                                 error={operabilitytError}
                                 helperText={operabilitytError ? operabilityErrorMessage : ''}
                             />
                         </span>
                     </Tooltip>
-
 
                     <Tooltip title={currentImpianto.availability ? '' : 'Disponibilità impianto necessario'}>
                         <span>

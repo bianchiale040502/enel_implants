@@ -98,17 +98,17 @@ function RowImplants({
             </TableCell>
             <TableCell>
                 <Box style={boxCell}>
-                    {enelImplant.rated_power}
-                </Box>
-            </TableCell>
-            <TableCell>
-                <Box style={boxCell}>
                     {enelImplant.num_unita_presenti}
                 </Box>
             </TableCell>
             <TableCell>
                 <Box style={boxCell}>
                     {enelImplant.num_unita_operativi}
+                </Box>
+            </TableCell>
+            <TableCell>
+                <Box style={boxCell}>
+                    {enelImplant.rated_power}
                 </Box>
             </TableCell>
             <TableCell>
