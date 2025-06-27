@@ -25,7 +25,7 @@ function FilterableImplantsTable() {
                     console.error("Errore nel recupero dei dati:", error);
                 })
                 .finally(() => {
-                    setLoading(false); // Assicura che loading sia false
+                    setLoading(false);
                 });
         }
         download();
