@@ -24,6 +24,24 @@ function RowImplants({
     setCurrentImpianto,
     isEditingChange,
 }) {
+    const formatRatedPower = (value) => {
+        const num = parseFloat(value);
+        if (isNaN(num)) return value;
+
+        const fixed = num.toFixed(10);
+        const trimmed = fixed.replace(/0+$/, '');
+        const parts = trimmed.split('.');
+
+        if (parts.length === 1) return parts[0];
+
+        const decimals = parts[1];
+
+        if (/^0*$/.test(decimals.slice(3))) {
+            return num.toFixed(3);
+        }
+
+        return trimmed;
+    };
 
     const boxCell = {
         display: "flex",
@@ -108,7 +126,7 @@ function RowImplants({
             </TableCell>
             <TableCell>
                 <Box style={boxCell}>
-                    {enelImplant.rated_power}
+                    {formatRatedPower(enelImplant.rated_power)}
                 </Box>
             </TableCell>
             <TableCell>

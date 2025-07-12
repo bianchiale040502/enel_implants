@@ -369,6 +369,7 @@ function DialogAddUpdate({
                         fullWidth
                         customInput={TextField}
                         allowNegative={false}
+                        decimalScale={0}
                         value={currentImpianto.num_unita_presenti}
                         onValueChange={({ floatValue }) => {
                             handleChange({
@@ -392,6 +393,7 @@ function DialogAddUpdate({
                                 fullWidth
                                 customInput={TextField}
                                 allowNegative={false}
+                                decimalScale={0}
                                 value={currentImpianto.num_unita_operativi}
                                 onValueChange={({ floatValue }) => {
                                     handleChange({
@@ -418,6 +420,7 @@ function DialogAddUpdate({
                                 fullWidth
                                 customInput={TextField}
                                 allowNegative={false}
+                                decimalScale={10}
                                 value={currentImpianto.rated_power}
                                 onValueChange={({ floatValue }) => {
                                     handleChange({
