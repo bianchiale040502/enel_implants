@@ -16,18 +16,18 @@ Progetto di un gestionale di impianti Enel con accesso alle modifiche tramite ad
 #
 
 ## 1. Clonare repository in una cartella progetti
-    https://github.com/bianchiale040502/progetto_prova_finale.git
+    https://github.com/bianchiale040502/enel_implants.git
 
-## 2. Aprire cartella 'progetto_prova_finale' in vscode
+## 2. Aprire cartella 'enel_implants' in vscode
 - N.B.: Usare git bash
 
 ## 3. Creazione Backend
 
 ### 3.1. Creare cartella 'backend' nel progetto
-    C:/Users/bianc/ProgettiApp/progetto_prova_finale/backend
+    C:/Users/bianc/ProgettiApp/enel_implants/backend
 
 ### 3.2. Posizionarsi nella directory creata
-    cd C:/Users/bianc/ProgettiApp/progetto_prova_finale/backend
+    cd C:/Users/bianc/ProgettiApp/enel_implants/backend
 
 ### 3.3. Creare virtual environment
     python -m venv .venv
@@ -50,7 +50,7 @@ source venv\Scripts\activate
     django-admin startproject backend
 
 ### 3.7. Entrare nella directory del progetto appena creato
-    C:/Users/bianc/ProgettiApp/progetto_prova_finale/backend/backend
+    C:/Users/bianc/ProgettiApp/enel_implants/backend/backend
 
 ### 3.8. Provare accensione server:
     python manage.py runserver
@@ -80,7 +80,7 @@ source venv\Scripts\activate
 ## 4. Creazione Frontend
 
 ### 4.1. Iniziare da directory:
-    C:/Users/bianc/ProgettiApp/progetto_prova_finale
+    C:/Users/bianc/ProgettiApp/enel_implants
 
 ### 4.2. Creare struttura applicazione
     npm create vite@latest 
@@ -92,7 +92,7 @@ source venv\Scripts\activate
     Select a variant: » JavaScript
 
 ### 4.3. Posizionarsi nella directory:
-    C:/Users/bianc/ProgettiApp/progetto_prova_finale/frontend
+    C:/Users/bianc/ProgettiApp/enel_implants/frontend
 
 ### 4.4. Installare dipendenze react e vite
     npm install
