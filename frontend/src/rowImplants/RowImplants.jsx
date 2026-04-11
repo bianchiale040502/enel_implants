@@ -8,7 +8,7 @@ import {
     Box,
     Tooltip
 } from '@mui/material';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CheckCircleOutlineOutlined from '@mui/icons-material/CheckCircleOutlineOutlined';
 import WarningIcon from '@mui/icons-material/Warning';
 
 import ButtonAddUpgrade from '../buttonAddUpgrade/ButtonAddUpgrade';
@@ -89,7 +89,7 @@ function RowImplants({
                         </CustomTooltip>
                     ) : (
                         <CustomTooltip title="Aggiornato">
-                            <CheckCircleOutlineIcon color="success" sx={{ fontSize: 40 }} />
+                            <CheckCircleOutlineOutlined color="success" sx={{ fontSize: 40 }} />
                         </CustomTooltip>
                     )}
                 </Box>
@@ -133,7 +133,7 @@ function RowImplants({
                 <Box style={boxCell}>
                     {enelImplant.operability ?
                         <CustomTooltip title="Operativo">
-                            <CheckCircleOutlineIcon color="success" sx={{ fontSize: 40 }} />
+                            <CheckCircleOutlineOutlined color="success" sx={{ fontSize: 40 }} />
                         </CustomTooltip>
                         :
                         <CustomTooltip title="Non Operativo">
@@ -146,7 +146,7 @@ function RowImplants({
                 <Box style={boxCell}>
                     {enelImplant.availability ?
                         <CustomTooltip title="Disponibile">
-                            <CheckCircleOutlineIcon color="success" sx={{ fontSize: 40 }} />
+                            <CheckCircleOutlineOutlined color="success" sx={{ fontSize: 40 }} />
                         </CustomTooltip>
                         :
                         <CustomTooltip title="Non Disponibile">
